@@ -12,7 +12,6 @@ class Scenic_base extends CS_Controller
         $this->load->model('supplier_model', 'supplier');
         $this->load->model('user_model', 'user');
         $this->load->model('region_model', 'region');
-
     }
 
     public function grid($pg = 1)
@@ -34,6 +33,64 @@ class Scenic_base extends CS_Controller
         $data['starLevel'] = $this->starLevel;
         $data['updown'] = $this->updown;
         $this->load->view('scenic_base/grid', $data);
+    }
+
+    public function add()
+    {
+        $data['scenicTheme'] = $this->scenic_theme->find(TRUE);
+        $data['starLevel'] = $this->starLevel;
+        $data['updown'] = $this->updown;
+        $this->load->view('scenic_base/add', $data);
+    }
+
+    public function addPost()
+    {
+        $error = $this->validate();
+        if (!empty($error)) {
+            $this->error('scenic_base/add', array('sid', $this->input->post('sid')), $error);
+        }
+
+        $this->db->trans_start();
+        $resultId = $this->scenic_base->insert($this->input->post());
+        $this->db->trans_complete();
+
+        if ($resultId) {
+            $this->success('scenic_base/grid', array('sid', $this->input->post('sid')), '保存成功！');
+        } else {
+            $this->error('scenic_base/add', array('sid', $this->input->post('sid')), '保存失败！');
+        }
+    }
+
+    public function edit($sid)
+    {
+        $result = $this->scenic_base->findById($sid);
+        if($result->num_rows() <= 0) {
+            $this->redirect('scenic_base/grid?sid='.$this->input->post('sid'));
+        }
+        $data['userCouponGet'] = $result->row(0);
+        $data['scenicTheme'] = $this->scenic_theme->find(TRUE);
+        $data['starLevel'] = $this->starLevel;
+        $data['updown'] = $this->updown;
+        $this->load->view('scenic_base/edit', $data);
+    }
+
+    public function editPost()
+    {
+        $sid = $this->input->post('coupon_get_id');
+        $error = $this->validate();
+        if (!empty($error)) {
+            $this->error('scenic_base/edit/'.$sid, array('sid', $this->input->post('sid')), $error);
+        }
+
+        $this->db->trans_start();
+        $resultId = $this->scenic_base->update($this->input->post());
+        $this->db->trans_complete();
+
+        if ($resultId) {
+            $this->success('scenic_base/grid', array('sid', $this->input->post('sid')), '保存成功！');
+        } else {
+            $this->error('scenic_base/edit/'.$sid, array('sid', $this->input->post('sid')), '保存失败！');
+        }
     }
 
     public function updown()

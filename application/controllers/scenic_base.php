@@ -17,7 +17,7 @@ class Scenic_base extends CS_Controller
     public function grid($pg = 1)
     {
         $page_num = 20;
-        $num = ($pg - 1) * $page_num;
+        $num = ($pg-1)*$page_num;
         $config['first_url'] = base_url('scenic_base/grid').$this->pageGetParam($this->input->get());
         $config['suffix'] = $this->pageGetParam($this->input->get());
         $config['base_url'] = base_url('scenic_base/grid');

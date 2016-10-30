@@ -135,13 +135,16 @@
                                         <td><input type="checkbox" class="checkboxes" value="1" ></td>
                                         <td><?php echo $item->sid;?></td>
                                         <td><?php echo $item->scenic_name;?></td>
-                                        <td><?php echo $item->theme_id;?></td>
+                                        <td><?php echo $scenicTheme[$item->theme_id];?></td>
                                         <td><?php echo $starLevel[$item->star_level];?></td>
                                         <td><?php echo $item->address;?></td>
                                         <td><?php echo $item->open_time;?></td>
                                         <td><?php echo $item->uid;?></td>
                                         <td>
                                             <?php echo $updown[$item->updown];?>
+                                            <a class="modify-updown glyphicons no-js <?php if($item->updown == 1):?>ok_2<?php else :?>remove_2<?php endif;?>" data-goods-id="<?php echo $item->goods_id;?>" data-flag="<?php echo $item->updown ?>" href="javascript:;">
+                                                <i></i>
+                                            </a>
                                         </td>
                                         <td><?php echo $item->created_at;?></td>
                                         <td>
@@ -162,3 +165,32 @@
     </div>
 </div>
 <?php $this->load->view('layout/footer');?>
+<script type="text/javascript">
+$(function(){
+    $('.modify-updown').click(function(){
+        var status = '下架';
+        if ($(this).hasClass('remove_2')) {
+            status = '上架';
+        }
+        if (confirm('确定要'+status+'?')) {
+            var obj = $(this);
+            var goods_id = $(this).attr('data-goods-id');
+            var flag = $(this).attr('data-flag');
+            $.ajax({
+                url:hostUrl()+'/scenic_base/updown',
+                type:'POST',
+                dataType:'json',
+                data: {goods_id:goods_id,flag:flag},
+                success: function(data) {
+                    if (data.flag == 2) {
+                        obj.attr('data-flag', data.flag).addClass('remove_2').removeClass('ok_2');
+                    } else if(data.flag == 1) {
+                        obj.attr('data-flag', data.flag).addClass('ok_2').removeClass('remove_2');
+                    } else {
+                        alert('操作失败');
+                    }
+                }
+            });
+        }
+    });
+</script>

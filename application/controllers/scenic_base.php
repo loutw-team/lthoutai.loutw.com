@@ -1,6 +1,9 @@
 <?php
 class Scenic_base extends CS_Controller
 {
+    private $starLevel = array(1 => '1A', 2 => '2A', 3 => '3A', 4 => '4A', 5 => '5A');
+    private $updown    = array(1 => '上架', 2 => '下架');
+
     public function _init()
     {
         $this->load->library('pagination');
@@ -9,6 +12,7 @@ class Scenic_base extends CS_Controller
         $this->load->model('supplier_model', 'supplier');
         $this->load->model('user_model', 'user');
         $this->load->model('region_model', 'region');
+
     }
 
     public function grid($pg = 1)
@@ -26,8 +30,33 @@ class Scenic_base extends CS_Controller
         $data['all_rows'] = $config['total_rows'];
         $data['pg_now'] = $pg;
         $data['page_num'] = $page_num;
-        $data['starLevel'] = array(1 => '1A', 2 => '2A', 3 => '3A', 4 => '4A', 5 => '5A');
-        $data['updown'] = array(1 => '上架', 2 => '下架');
+        $data['scenicTheme'] = $this->scenic_theme->find(TRUE);
+        $data['starLevel'] = $this->starLevel;
+        $data['updown'] = $this->updown;
         $this->load->view('scenic_base/grid', $data);
+    }
+
+    public function updown()
+    {
+        $goods_id = $this->input->post('goods_id');
+        $status = $this->input->post('flag');
+        switch ($status) {
+            case '1': $updown = 2; break;
+            case '2': $updown = 1; break;
+            default : $updown = 1; break;
+        }
+        $this->db->trans_start();
+        $isUpdate = $this->scenic_base->updateStatus($goods_id, array('updown'=>$updown));
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === TRUE && $isUpdate) {
+            echo json_encode(array(
+                'flag' => $updown,
+            ));
+        } else {
+            echo json_encode(array(
+                'flag' => 3,
+            ));
+        }
+        exit;
     }
 }

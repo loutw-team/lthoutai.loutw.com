@@ -1,16 +1,12 @@
 <?php 
 class Advert extends CS_Controller
 {
-    private $advertArray;
+    private $advertArray = array(1=>'首页幻灯片广告', 2=>'登陆幻灯片广告', 3=>'女性首页广告');
+
     public function _init()
     {
         $this->load->library('pagination');
         $this->load->model('advert_model', 'advert');
-        $this->advertArray = array(
-            '1' => '首页幻灯片广告',
-            '2' => '登陆幻灯片广告',
-            '3' => '女性首页广告',
-        );
     }
     
     public function grid($pg = 1)
@@ -64,7 +60,6 @@ class Advert extends CS_Controller
     
     public function addPost()
     {
-        
         $error = $this->validate();
         if (empty($_FILES['picture']['name'])) {
             $error[] = '图片添加不能为空';

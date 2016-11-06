@@ -3,7 +3,7 @@ class Scenic_base_model extends CI_Model
 {
     private $table = 'scenic_base';
 
-    public function findById($sid)
+    public function findBySid($sid)
     {
         $this->db->where('sid', $sid);
         return $this->db->get($this->table);
@@ -13,7 +13,7 @@ class Scenic_base_model extends CI_Model
     {
         $this->checkWhereParam($params);
         return $this->db->count_all_results($this->table);
-    }   
+    }
 
     public function page_list($page_num, $num, $params=array())
     {
@@ -29,28 +29,28 @@ class Scenic_base_model extends CI_Model
             $this->db->where('sid', $params['sid']);
         }
         if (!empty($params['scenic_name'])) {
-            $this->db->like('scenic_name', $params['scenic_name']);
+            $this->db->where('scenic_name', $params['scenic_name']);
         }
         if (!empty($param['scenic_search'])) {
-            $this->db->where("((`scenic_name` LIKE '%{$param['goods_search']}%') OR (`sid`='{$param['goods_search']}'))");
+            $this->db->where("((`scenic_name` LIKE '%{$param['scenic_search']}%') OR (`sid`='{$param['scenic_search']}'))");
         }
-        if (!empty($params['uid'])) {
-            $this->db->where('uid', $params['uid']);
+        if (!empty($params['supplier_id'])) {
+            $this->db->where('supplier_id', $params['supplier_id']);
         }
-        if (!empty($params['star_level'])) {
-            $this->db->where('star_level', $params['star_level']);
+        if (!empty($params['scope'])) {
+            $this->db->where('scope', $params['scope']);
         }
-        if (!empty($params['updown'])) {
-            $this->db->where('updown', $params['updown']);
+        if (!empty($params['status'])) {
+            $this->db->where('status', $params['status']);
         }
-        if (!empty($param['province_id'])) {
-            $this->db->where('mall_goods_base.province_id', $param['province_id']);
+        if (!empty($params['province_id'])) {
+            $this->db->where('province_id', $params['province_id']);
         }
-        if (!empty($param['city_id'])) {
-            $this->db->where('mall_goods_base.city_id', $param['city_id']);
+        if (!empty($params['city_id'])) {
+            $this->db->where('city_id', $params['city_id']);
         }
-        if (!empty($param['district_id'])) {
-            $this->db->where('mall_goods_base.district_id', $param['district_id']);
+        if (!empty($params['district_id'])) {
+            $this->db->where('district_id', $params['district_id']);
         }
         if (!empty($params['start_time'])) {
             $this->db->where('created_at >=', $params['start_time'].' 00:00:00');
@@ -60,67 +60,59 @@ class Scenic_base_model extends CI_Model
         }
     }
 
-    public function insert($postData=array())
+    public function insert($params=array())
     {
         $data = array(
-            'scenic_name' => $postData['scenic_name'],
-            'special'     => $postData['special'],
-            'star_level'  => $postData['star_level'],
-            'theme_id'    => $postData['theme_id'],
-            'open_time'   => $postData['open_time'],
-            'notice'      => $postData['notice'],
-            'info'        => $postData['info'],
-            'traffic'     => $postData['traffic'],
-            'attention'   => $postData['attention'],
-            'uid'         => $postData['uid'],
-            'province_id' => $postData['province_id'],
-            'city_id'     => $postData['city_id'],
-            'district_id' => $postData['district_id'],
-            'address'     => $postData['address'],
-            'locType'     => $postData['locType'],
-            'longitude'   => !empty($postData['longitude']) ? $postData['longitude'] : '',
-            'latitude'    => !empty($postData['latitude']) ? $postData['latitude'] : '',
-            'updown'      => $postData['updown'],
-            'created_at'  => date('Y-m-d H:i:s'),
-            'updated_at'  => date('Y-m-d H:i:s'),
+            'scenic_name'   => $params['scenic_name'],
+            'special'       => $params['special'],
+            'star_level'    => $params['star_level'],
+            'theme_id'      => $params['theme_id'],
+            'open_time'     => $params['open_time'],
+            'notice'        => $params['notice'],
+            'info'          => $params['info'],
+            'traffic'       => !empty($params['traffic']) ? $params['traffic'] : '',
+            'attention'     => !empty($params['attention']) ? $params['attention'] : '',
+            'pics'          => '',
+            'supplier_id'   => $params['supplier_id'],
+            'province_id'   => $params['province_id'],
+            'city_id'       => $params['city_id'],
+            'district_id'   => $params['district_id'],
+            'address'       => $params['address'],
+            'locType'       => $params['locType'],
+            'longitude'     => $params['longitude'],
+            'latitude'      => $params['latitude'],
+            'updown'        => $params['updown'],
+            'created_at'    => date('Y-m-d H:i:s'),
+            'updated_at'    => date('Y-m-d H:i:s'),
         );
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();
     }
     
-    public function update($postData=array())
+    public function update($params=array())
     {
         $data = array(
-            'scenic_name' => $postData['scenic_name'],
-            'special'     => $postData['special'],
-            'star_level'  => $postData['star_level'],
-            'theme_id'    => $postData['theme_id'],
-            'open_time'   => $postData['open_time'],
-            'notice'      => $postData['notice'],
-            'info'        => $postData['info'],
-            'traffic'     => $postData['traffic'],
-            'attention'   => $postData['attention'],
-            'uid'         => $postData['uid'],
-            'province_id' => $postData['province_id'],
-            'city_id'     => $postData['city_id'],
-            'district_id' => $postData['district_id'],
-            'address'     => $postData['address'],
-            'locType'     => $postData['locType'],
-            'longitude'   => !empty($postData['longitude']) ? $postData['longitude'] : '',
-            'latitude'    => !empty($postData['latitude']) ? $postData['latitude'] : '',
-            'updown'      => $postData['updown'],
-            'updated_at'  => date('Y-m-d H:i:s'),
+            'scenic_name'   => $params['scenic_name'],
+            'special'       => $params['special'],
+            'star_level'    => $params['star_level'],
+            'theme_id'      => $params['theme_id'],
+            'open_time'     => $params['open_time'],
+            'notice'        => $params['notice'],
+            'info'          => $params['info'],
+            'traffic'       => !empty($params['traffic']) ? $params['traffic'] : '',
+            'attention'     => !empty($params['attention']) ? $params['attention'] : '',
+            'supplier_id'   => $params['supplier_id'],
+            'province_id'   => $params['province_id'],
+            'city_id'       => $params['city_id'],
+            'district_id'   => $params['district_id'],
+            'address'       => $params['address'],
+            'locType'       => $params['locType'],
+            'longitude'     => $params['longitude'],
+            'latitude'      => $params['latitude'],
+            'updown'        => $params['updown'],
+            'updated_at'    => date('Y-m-d H:i:s'),
         );
-        $this->db->where('sid', $postData['sid']);
-        return $this->db->update($this->table, $data);
-    }
-
-    public function updateStatus($goods_id, $params = array())
-    {
-        $data = array(
-            'updown' => $params['updown'],
-        );
-        $this->db->where('goods_id', $goods_id);
+        $this->db->where('sid', $params['sid']);
         return $this->db->update($this->table, $data);
     }
 }

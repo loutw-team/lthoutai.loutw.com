@@ -23,6 +23,14 @@ class Scenic_base_model extends CI_Model
         return $this->db->get($this->table);
     }
 
+    public function excelExport($params = array())
+    {
+        $this->db->select('sid, scenic_name, special, star_level, theme_id, open_time, supplier_id, address, locType, longitude, latitude, updown, created_at, updated_at');
+        $this->checkWhereParam($params);
+        $this->db->order_by('sid', 'DESC');
+        return $this->db->get($this->table);
+    }
+
     private function checkWhereParam($params = array())
     {
         if (!empty($params['sid'])) {

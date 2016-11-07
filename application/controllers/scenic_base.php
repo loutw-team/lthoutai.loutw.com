@@ -313,19 +313,18 @@ class Scenic_base extends CS_Controller
 
     public function excelExport($getData)
     {
-        $result = $this->mall_goods_base->excelExport($getData);
+        $result = $this->scenic_base->excelExport($getData);
         if ($result->num_rows() <= 0) {
-            $this->error('mall_goods_base/grid', null, '这个时间段没有记录');
+            $this->error('scenic_base/grid', null, '这个时间段没有记录');
         }
         if($result->num_rows() > 10000){
-            $this->error('mall_goods_base/grid', null, '由于导出的数据太多，请选择一个时间范围');
+            $this->error('scenic_base/grid', null, '由于导出的数据太多，请选择一个时间范围');
         }
         $arrayResult = $result->result_array();
-
-        array_unshift($arrayResult, array('自增编号', '商品名称', '商品SKU', '商品来源', '品牌编号', '商品重量（g）', '市场价', '销售价', '供应价', '运费模版ID', '自定义运费', '属性类型ID', '产品类型', '供应商ID', '库存', '地址', '创建时间', '更新时间'));
+        array_unshift($arrayResult, array('景点编号', '景点名称', '景点特色', '景点星级', '主题', '开放时间', '供应商编号', '地址', '地图类型', '经度', '纬度', '状态1-上架2-下架', '添加时间', '更新时间'));
         $this->load->library('excel');
         $this->excel->addArray($arrayResult);
-        $this->excel->generateXML(date('Ymd').'商品列表');
+        $this->excel->generateXML(date('Ymd').'景点列表');
     }
 
     /**
@@ -337,20 +336,20 @@ class Scenic_base extends CS_Controller
         $page_num = 10;
         $num = ($pg-1)*$page_num;
         $config['per_page'] = $page_num;
-        $config['first_url'] = base_url('mall_goods_base/ajaxGetMallGoods').$this->pageGetParam($this->input->get());
+        $config['first_url'] = base_url('scenic_base/ajaxGetMallGoods').$this->pageGetParam($this->input->get());
         $config['suffix'] = $this->pageGetParam($this->input->get());
-        $config['base_url'] = base_url('mall_goods_base/ajaxGetMallGoods');
-        $config['total_rows'] = $this->mall_goods_base->total($this->input->get());
+        $config['base_url'] = base_url('scenic_base/ajaxGetMallGoods');
+        $config['total_rows'] = $this->scenic_base->total($this->input->get());
         $config['uri_segment'] = 3;
         $this->pagination->initialize($config);
         $data['pg_link']   = $this->pagination->create_links();
-        $data['page_list'] = $this->mall_goods_base->page_list($page_num, $num, $this->input->get());
+        $data['page_list'] = $this->scenic_base->page_list($page_num, $num, $this->input->get());
         $data['all_rows']  = $config['total_rows'];
         $data['pg_now']    = $pg;
         $data['page_num']  = $page_num;
         echo json_encode(array(
-            'status'=>true,
-            'html'  =>$this->load->view('mall_goods_base/ajaxGoodsBase/ajaxData', $data, true)
+            'status'=> true,
+            'html'  => $this->load->view('scenic_base/ajaxGoodsBase/ajaxData', $data, true)
         ));exit;
     }
 }

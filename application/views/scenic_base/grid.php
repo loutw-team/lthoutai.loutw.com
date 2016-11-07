@@ -149,7 +149,7 @@
                                         <td><?php echo $item->created_at;?></td>
                                         <td>
                                             <p>
-                                                <a href="<?php echo base_url('scenic_goods/grid').'?sid='.$this->input->get('sid') ?>" class="btn mini green">门票</a>
+                                                <a href="<?php echo base_url('scenic_goods/grid').'?sid='.$item->sid ?>" class="btn mini green">门票</a>
                                                 <a href="<?php echo base_url('scenic_base/images/'.$item->sid);?>" class="btn mini green">图片</a>
                                             <p>
                                             <p>

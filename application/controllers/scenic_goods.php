@@ -225,14 +225,14 @@ class Scenic_goods extends CS_Controller
      * 获取
      * @param number $pg
      */
-    public function ajaxGoodsBase($pg=1)
+    public function ajaxScenicGoods($pg = 1)
     {
         $pageNum = 10;
         $num = ($pg-1)*$pageNum;
         $config['per_page'] = $pageNum;
-        $config['first_url'] = base_url('scenic_goods/ajaxGetScenic').$this->pageGetParam($this->input->get());
+        $config['first_url'] = base_url('scenic_goods/ajaxGetGoods').$this->pageGetParam($this->input->get());
         $config['suffix'] = $this->pageGetParam($this->input->get());
-        $config['base_url'] = base_url('scenic_goods/ajaxGetScenic');
+        $config['base_url'] = base_url('scenic_goods/ajaxGetGoods');
         $config['total_rows'] = $this->scenic_goods->total($this->input->get());
         $config['uri_segment'] = 3;
         $this->pagination->initialize($config);
@@ -243,7 +243,7 @@ class Scenic_goods extends CS_Controller
         $data['page_num']  = $pageNum;
         echo json_encode(array(
             'status'=> true,
-            'html'  => $this->load->view('scenic_goods/ajaxScenicBase/ajaxData', $data, true)
+            'html'  => $this->load->view('scenic_goods/ajaxScenicGoods/ajaxData', $data, true)
         ));exit;
     }
 }

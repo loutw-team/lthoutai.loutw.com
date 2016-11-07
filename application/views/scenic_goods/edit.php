@@ -152,33 +152,34 @@
 <?php $this->load->view('layout/footer');?>
 <?php $this->load->view('supplier/ajaxSupplier/ajaxGet');?>
 <script type="text/javascript">
-$(document).ready(function(){
-    // 提交验证
-    $('form.scenic-base-form').submit(function () {
-        return false;
-    }).validate({
-        submitHandler: function (f) {
-            $.ajax({
-                type: 'post',
-                async: true,
-                dataType: 'json',
-                url: hostUrl() + '/scenic_base/ajaxValidate',
-                data: $('form.scenic-base-form').serialize(),
-                beforeSend: function () {
-                    $('.form-actions [type=submit]').text('加载中');
-                },
-                success: function (data) {
-                    if (data.status) {
-                        $('.alert-error').hide();
-                        window.location.href = data.messages;
-                    } else {
-                        $('.alert-error').show();
-                        $('.alert-error .remove_2 p').html(data.messages);
-                        $('.footer .go-top').trigger('click');
+    $(document).ready(function(){
+        // 提交验证
+        $('form.scenic-goods-form').submit(function () {
+            return false;
+        }).validate({
+            ignore: '',
+            submitHandler: function (f) {
+                $.ajax({
+                    type: 'post',
+                    async: true,
+                    dataType: 'json',
+                    url: hostUrl() + '/scenic_goods/ajaxValidate',
+                    data: $('form.scenic-goods-form').serialize(),
+                    beforeSend: function () {
+                        $('.form-actions [type=submit]').text('加载中');
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $('.alert-error').hide();
+                            window.location.href = data.messages;
+                        } else {
+                            $('.alert-error').show();
+                            $('.alert-error .remove_2 p').html(data.messages);
+                            $('.footer .go-top').trigger('click');
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
+        });
     });
-});
 </script>

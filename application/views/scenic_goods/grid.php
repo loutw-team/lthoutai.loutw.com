@@ -2,8 +2,8 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <h3 class="page-title">景区管理<small> 景点列表</small></h3>
-            <?php echo breadcrumb(array('景区管理', '景区产品', '景点列表')); ?>
+            <h3 class="page-title">景区管理<small> 门票列表</small></h3>
+            <?php echo breadcrumb(array('景区管理', '景区产品', '门票列表')); ?>
         </div>
     </div>
     <?php echo execute_alert_message() ?>
@@ -22,9 +22,9 @@
                         <div class="row-fluid">
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">景点搜索</label>
+                                    <label class="control-label">门票搜索</label>
                                     <div class="controls">
-                                        <input type="text" name="scenic_search" value="<?php echo $this->input->get('scenic_search') ?>" class="m-wrap span12" placeholder="请输入景区编号或景区名称">
+                                        <input type="text" name="goods_search" value="<?php echo $this->input->get('goods_search') ?>" class="m-wrap span12" placeholder="请输入门票编号或门票名称">
                                     </div>
                                 </div>
                             </div>
@@ -91,7 +91,7 @@
                         <div class="form-actions">
                             <button type="submit" class="btn green">搜索</button>
                             <button type="button" class="btn reset_button_search">重置条件</button>
-                            <button type="submit" name="excel" class="btn">导出Excel</button>
+                            <button type="submit" name="excel" class="btn blue">导出Excel</button>
                         </div>
                     </form>
                 </div>

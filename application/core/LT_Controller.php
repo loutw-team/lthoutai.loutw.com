@@ -212,23 +212,23 @@ class LT_Controller extends CI_Controller
         }
         return $suffix;
     }
-    
+
     /**
      * ci 验证码
      * @return Ambigous <boolean, multitype:number string >
      */
-    public function getCaptcha($name, $font_size=20, $img_width=100, $img_height=30, $count=4)
+    public function getCaptcha($font_size=20, $img_width=100, $img_height=30, $count=4)
     {
         $this->load->helper('captcha');
-        $str = 'abcdefghgklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUXWXYZ23456789';
+        $str = 'abcdefghgkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUXWXYZ23456789';
         $word = '';
         for ($i=0; $i < $count; $i++) {
             $word .= $str[mt_rand(0,strlen($str)-1)];
         }
         $vals = array(
             'word'       => $word,
-            'img_path'   => FCPATH.'captcha/',
-            'img_url'    => base_url().'captcha/',
+            'img_path'   => $this->config->upload_image_path('common/captcha'),
+            'img_url'    => $this->config->show_image_url('common/captcha'),
             'font_path'  => BASEPATH.'fonts/texb.ttf',
             'font_size'  => $font_size.'px',
             'img_width'  => $img_width,
@@ -236,7 +236,7 @@ class LT_Controller extends CI_Controller
             'expiration' => '300'
         );
         $captcha = create_captcha($vals);
-        $this->session->set_userdata($name, $captcha['word']);
+        set_cookie('captcha', $captcha['word'], 300);
         return $captcha;
     }
 }

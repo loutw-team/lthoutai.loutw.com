@@ -115,4 +115,14 @@ class Scenic_base_model extends CI_Model
         $this->db->where('sid', $params['sid']);
         return $this->db->update($this->table, $data);
     }
+
+    public function updateBySid($sid, $params = array())
+    {
+        $data = array();
+        if (!empty($params)) {
+            $data['updown'] = $params['updown'];
+        }
+        $this->db->where('sid', $sid);
+        return $this->db->update($this->table, $data);
+    }
 }

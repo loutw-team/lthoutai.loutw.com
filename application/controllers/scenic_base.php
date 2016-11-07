@@ -289,7 +289,7 @@ class Scenic_base extends CS_Controller
 
     public function setUpdown()
     {
-        $goods_id = $this->input->post('goods_id');
+        $sid = $this->input->post('goods_id');
         $status = $this->input->post('flag');
         switch ($status) {
             case '1': $updown = '2'; break;
@@ -297,7 +297,7 @@ class Scenic_base extends CS_Controller
             default : $updown = '1'; break;
         }
         $this->db->trans_start();
-        $isUpdate = $this->scenic_base->updateBySid($goods_id, array('updown'=>$updown));
+        $isUpdate = $this->scenic_base->updateBySid($sid, array('updown'=>$updown));
         $this->db->trans_complete();
         if ($this->db->trans_status() === TRUE && $isUpdate) {
             echo json_encode(array(

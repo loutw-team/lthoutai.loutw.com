@@ -22,8 +22,7 @@ class Home extends CS_Controller
 
     public function editPost()
     {
-        $adminuser_id = $this->input->post('id');
-        $error = $this->validateEdit();
+        $error = $this->validate();
         if ($this->input->post('modify_password')) {
             if ($this->input->post('password') != $this->input->post('confirm_password')) {
                 $error[] = '密码填写不一致。';
@@ -47,17 +46,15 @@ class Home extends CS_Controller
         }
     }
     
-    public function validateEdit()
+    public function validate()
     {
         $error = array();
         if ($this->validateParam($this->input->post('name'))) {
-            $error[] = ' 用户名不能为空。';
+            $error[] = '用户名不能为空。';
         }
         if (!valid_email($this->input->post('email'))) {
-            $error[] = ' 邮箱地址不正确。';
+            $error[] = '邮箱地址不正确。';
         }
-
         return $error;
     }
-
 }

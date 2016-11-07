@@ -10,7 +10,6 @@ class Scenic_base extends CS_Controller
         $this->load->model('scenic_base_model', 'scenic_base');
         $this->load->model('scenic_theme_model', 'scenic_theme');
         $this->load->model('supplier_model', 'supplier');
-        $this->load->model('user_model', 'user');
         $this->load->model('region_model', 'region');
     }
 
@@ -143,23 +142,23 @@ class Scenic_base extends CS_Controller
      * 商品多图显示
      * author laona
      **/
-    public function images($goods_id)
+    public function images($sid)
     {
-        $result = $this->mall_goods_base->findByGoodsId($goods_id);
+        $result = $this->scenic_base->findByGoodsId($sid);
         if ($result->num_rows() <= 0) {
-            $this->error('mall_goods_base/grid', '', '找不到产品相关信息！');
+            $this->error('scenic_base/grid', '', '找不到产品相关信息！');
         }
-        $mallgoods = $result->row();
-        $data['mallgoods'] = $mallgoods;
-        $pics = $mallgoods->goods_img;
+        $scenicBase = $result->row(0);
+        $data['scenicBase'] = $scenicBase;
+        $pics = $scenicBase->goods_img;
         if (!empty($pics)) {
             $goods_img = array_filter(explode('|', $pics));
         } else {
             $goods_img = array();
         }
         $data['goods_img'] = $goods_img;
-        $data['goods_id'] = $goods_id;
-        $this->load->view('mall_goods_base/images', $data);
+        $data['sid'] = $sid;
+        $this->load->view('scenic_base/images', $data);
     }
 
     /**
@@ -168,48 +167,46 @@ class Scenic_base extends CS_Controller
      */
     public function saveImages()
     {
-        if (!$this->input->post('goods_id')) {
-            $this->error('mall_goods_base/grid', '', '内部错误！');
+        if (!$this->input->post('sid')) {
+            $this->error('scenic_base/grid', '', '内部错误！');
         }
-        $goods_id = (int)$this->input->post('goods_id');
+        $sid = (int)$this->input->post('sid');
         if (empty($_FILES['goods_img']['name'])) {
-            $this->error('mall_goods_base/images', $goods_id, '请选择图片上传！');
+            $this->error('scenic_base/images', $sid, '请选择图片上传！');
         }
-        $imageData = $this->dealWithMoreImages('goods_img', '', 'mall');
+        $imageData = $this->dealWithMoreImages('goods_img', '', 'scenic');
         if ($imageData == false) {
-            $this->error('mall_goods_base/images', $goods_id, '请选择图片上传！');
+            $this->error('scenic_base/images', $sid, '请选择图片上传！');
         }
         $this->db->trans_start();
-        $this->mall_goods_base->insertImageBatch($goods_id,$imageData);
+        $this->scenic_base->updateBySid($sid, $imageData);
         $this->db->trans_complete();
         if ($this->db->trans_status() === FALSE) {
-            $this->error('mall_goods_base/images', $goods_id, '数据保存失败！');
+            $this->error('scenic_base/images', $sid, '数据保存失败！');
         }
-        $this->success('mall_goods_base/images', $goods_id, '数据保存成功！');
+        $this->success('scenic_base/images', $sid, '数据保存成功！');
     }
 
     public function deleteImage()
     {
-        $goods_id = $this->input->get('goods_id');
-        $image_name = $this->input->get('image_name');
+        $sid = $this->input->get('sid');
+        $imageName = $this->input->get('image_name');
         if (empty($goods_id)) {
-            $this->error('mall_goods_base/grid', '', '内部错误！');
+            $this->error('scenic_base/grid', '', '内部错误！');
         }
-        $result = $this->mall_goods_base->findByGoodsId($goods_id);
+        $result = $this->scenic_base->findBySid($sid);
 
         if ($result->num_rows() <= 0) {
-            $this->error('mall_goods_base/grid', '', '找不到产品相关信息！');
+            $this->error('scenic_base/grid', '', '找不到产品相关信息！');
         }
-        $mallgoods = $result->row();
-        $pics = trim($mallgoods->goods_img, '|');
-        $params['goods_id'] = $goods_id;
-        $params['goods_img'] = str_replace($image_name.'|', '', $mallgoods->goods_img);
-        $resultId = $this->mall_goods_base->insertImage($params);
-        $this->deleteOldfileName($image_name, 'mall');
+        $scenicBase = $result->row();
+        $scenicImg = str_replace($imageName.'|', '', $scenicBase->pics);
+        $resultId = $this->scenic_base->updateBySid($sid, array('pic'=>$scenicImg));
+        $this->deleteOldfileName($imageName, 'scenic');
         if (!$resultId) {
-            $this->error('mall_goods_base/images', $goods_id, '删除失败');
+            $this->error('scenic_base/images', $sid, '删除失败');
         }
-        $this->success('mall_goods_base/images', $goods_id, '删除成功！');
+        $this->success('scenic_base/images', $sid, '删除成功！');
     }
 
     /**
@@ -218,21 +215,21 @@ class Scenic_base extends CS_Controller
      */
     public function mainImage()
     {
-        $goods_id = $this->input->get('goods_id');
-        $result = $this->mall_goods_base->findByGoodsId($goods_id);
+        $sid = $this->input->get('sid');
+        $result = $this->scenic_base->findByGoodsId($sid);
         if ($result->num_rows() <= 0) {
-            $this->error('mall_goods_base/grid', '', '找不到产品相关信息！');
+            $this->error('scenic_base/grid', '', '找不到产品相关信息！');
         }
         $mall_goods = $result->row();
         $image_name = $this->input->get('image_name');
         $pics = str_replace($image_name.'|', '', $mall_goods->goods_img);
         $params['goods_img'] = $image_name.'|'.$pics;
-        $params['goods_id'] = $goods_id;
-        $resultId = $this->mall_goods_base->insertImage($params);
+        $params['goods_id'] = $sid;
+        $resultId = $this->scenic_base->updateBySid($params);
         if (!$resultId) {
-            $this->error('mall_goods_base/images', $goods_id, '删除失败');
+            $this->error('scenic_base/images', $sid, '删除失败');
         }
-        $this->success('mall_goods_base/images', $goods_id, '删除成功！');
+        $this->success('scenic_base/images', $sid, '删除成功！');
     }
 
     /**
@@ -243,7 +240,7 @@ class Scenic_base extends CS_Controller
     {
         $error = array();
         if ($this->validateParam($this->input->post('scenic_name'))) {
-            $error[] = '景区名称不可为空！';
+            $error[] = '景点名称不可为空！';
         }
         $supplier_id = $this->input->post('supplier_id');
         if (!empty($supplier_id)) {//为零时不判断，默认自营产品

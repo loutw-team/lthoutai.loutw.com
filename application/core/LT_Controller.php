@@ -123,7 +123,7 @@ class LT_Controller extends CI_Controller
      * @param url参数 $param
      * @param 提示信息 $message
      */
-    protected function error($url, $param, $message)
+    protected function error($url, $params, $message)
     {
         if (is_array($message)) {
             foreach ($message as $val) {
@@ -134,7 +134,7 @@ class LT_Controller extends CI_Controller
             $this->session->set_flashdata('error', $message);
         }
         
-        $this->formatUrl($url, $param);
+        $this->formatUrl($url, $params);
     }
     
     /**
@@ -143,24 +143,23 @@ class LT_Controller extends CI_Controller
      * @param url参数  $param
      * @param 提示信息 $message
      */
-    protected function success($url, $param, $message)
+    protected function success($url, $params, $message)
     {
         $this->session->set_flashdata('success', $message);
-        $this->formatUrl($url, $param);
+        $this->formatUrl($url, $params);
     }
     
-    private function formatUrl($url, $param)
+    private function formatUrl($url, $params)
     {
         $len = strlen($url)-1;
         if ($url{$len} != '/') {
             $url = $url.'/';
         }
         
-        if (is_array($param)) {
-            $fullUrl = http_build_query($param);
-            $url .= '?'.$fullUrl;
+        if (is_array($params)) {
+            $url .= '?'.http_build_query($params);
         } else {
-            $url .= $param;
+            $url .= $params;
         }
         
         $parseUrl = parse_url($url);
@@ -182,24 +181,6 @@ class LT_Controller extends CI_Controller
     }
     
     /**
-     * 错误回跳到首页
-     * @param unknown $msg
-     */
-    protected function alertError($msg)
-    {
-        echo '<script type="text/javascript">alert("'.$msg.'");location.href="'.base_url().'"</script>';exit;
-    }
-    
-    /**
-     * 错误回跳到首页
-     * @param unknown $msg
-     */
-    protected function alertJumpPre($msg)
-    {
-        echo '<script type="text/javascript">alert("'.$msg.'");location.href="Javascript:window.history.go(-1)"</script>';exit;
-    }
-    
-    /**
      * 分页get参数
      * @param unknown $getParam
      */
@@ -207,8 +188,7 @@ class LT_Controller extends CI_Controller
     {
         $suffix = '';
         if ($getParam) {
-            $param = http_build_query($getParam);
-            $suffix = '?'.$param;
+            $suffix = '?'.http_build_query($getParam);
         }
         return $suffix;
     }

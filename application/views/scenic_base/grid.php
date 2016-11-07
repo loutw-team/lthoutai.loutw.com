@@ -2,8 +2,8 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <h3 class="page-title">景点管理<small> 景点列表</small></h3>
-            <?php echo breadcrumb(array('景点管理', '景点产品', '景点列表')); ?>
+            <h3 class="page-title">景区管理<small> 景点列表</small></h3>
+            <?php echo breadcrumb(array('景区管理', '景区产品', '景点列表')); ?>
         </div>
     </div>
     <?php echo execute_alert_message() ?>
@@ -91,7 +91,7 @@
                         <div class="form-actions">
                             <button type="submit" class="btn green">搜索</button>
                             <button type="button" class="btn reset_button_search">重置条件</button>
-                            <button type="submit" name="excel" class="btn">导出Excel</button>
+                            <button type="submit" name="excel" class="btn blue">导出Excel</button>
                         </div>
                     </form>
                 </div>

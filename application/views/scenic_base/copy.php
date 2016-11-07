@@ -2,8 +2,8 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <h3 class="page-title">景点管理<small> 景点列表</small></h3>
-            <?php echo breadcrumb(array('景点管理', '景点产品', '景点产品复制')); ?>
+            <h3 class="page-title">景区管理<small> 景点产品复制</small></h3>
+            <?php echo breadcrumb(array('景区管理', '景区产品', '景点列表', '景点产品复制')); ?>
         </div>
     </div>
     <div class="alert alert-error" style="display:none;">

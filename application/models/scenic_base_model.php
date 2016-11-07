@@ -39,8 +39,8 @@ class Scenic_base_model extends CI_Model
         if (!empty($params['scenic_name'])) {
             $this->db->where('scenic_name', $params['scenic_name']);
         }
-        if (!empty($param['scenic_search'])) {
-            $this->db->where("((`scenic_name` LIKE '%{$param['scenic_search']}%') OR (`sid`='{$param['scenic_search']}'))");
+        if (!empty($params['scenic_search'])) {
+            $this->db->where("((`scenic_name` LIKE '%{$params['scenic_search']}%') OR (`sid`='{$params['scenic_search']}'))");
         }
         if (!empty($params['supplier_id'])) {
             $this->db->where('supplier_id', $params['supplier_id']);

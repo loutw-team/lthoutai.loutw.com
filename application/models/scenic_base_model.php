@@ -15,11 +15,11 @@ class Scenic_base_model extends CI_Model
         return $this->db->count_all_results($this->table);
     }
 
-    public function page_list($page_num, $num, $params=array())
+    public function page_list($pageNum, $num, $params=array())
     {
         $this->checkWhereParam($params);
         $this->db->order_by('sid', 'DESC');
-        $this->db->limit($page_num, $num);
+        $this->db->limit($pageNum, $num);
         return $this->db->get($this->table);
     }
 

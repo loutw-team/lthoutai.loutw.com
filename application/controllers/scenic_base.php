@@ -20,8 +20,8 @@ class Scenic_base extends CS_Controller
         if (isset($getData['excel']) && $getData['excel']== 'excel') {
             $this->excelExport($getData);
         } else {
-            $page_num = 20;
-            $num = ($pg - 1) * $page_num;
+            $pageNum = 20;
+            $num = ($pg - 1) * $pageNum;
             $config['first_url'] = base_url('scenic_base/grid').$this->pageGetParam($getData);
             $config['suffix'] = $this->pageGetParam($getData);
             $config['base_url'] = base_url('scenic_base/grid');
@@ -29,10 +29,10 @@ class Scenic_base extends CS_Controller
             $config['uri_segment'] = 3;
             $this->pagination->initialize($config);
             $data['pg_link'] = $this->pagination->create_links();
-            $data['page_list'] = $this->scenic_base->page_list($page_num, $num, $getData);
+            $data['page_list'] = $this->scenic_base->page_list($pageNum, $num, $getData);
             $data['all_rows'] = $config['total_rows'];
             $data['pg_now'] = $pg;
-            $data['page_num'] = $page_num;
+            $data['page_num'] = $pageNum;
             $data['starLevel'] = $this->starLevel;
             $data['updown'] = $this->updown;
             $this->load->view('scenic_base/grid', $data);
@@ -333,23 +333,23 @@ class Scenic_base extends CS_Controller
      */
     public function ajaxGoodsBase($pg=1)
     {
-        $page_num = 10;
-        $num = ($pg-1)*$page_num;
-        $config['per_page'] = $page_num;
-        $config['first_url'] = base_url('scenic_base/ajaxGetMallGoods').$this->pageGetParam($this->input->get());
+        $pageNum = 10;
+        $num = ($pg-1)*$pageNum;
+        $config['per_page'] = $pageNum;
+        $config['first_url'] = base_url('scenic_base/ajaxGetScenic').$this->pageGetParam($this->input->get());
         $config['suffix'] = $this->pageGetParam($this->input->get());
-        $config['base_url'] = base_url('scenic_base/ajaxGetMallGoods');
+        $config['base_url'] = base_url('scenic_base/ajaxGetScenic');
         $config['total_rows'] = $this->scenic_base->total($this->input->get());
         $config['uri_segment'] = 3;
         $this->pagination->initialize($config);
         $data['pg_link']   = $this->pagination->create_links();
-        $data['page_list'] = $this->scenic_base->page_list($page_num, $num, $this->input->get());
+        $data['page_list'] = $this->scenic_base->page_list($pageNum, $num, $this->input->get());
         $data['all_rows']  = $config['total_rows'];
         $data['pg_now']    = $pg;
-        $data['page_num']  = $page_num;
+        $data['page_num']  = $pageNum;
         echo json_encode(array(
             'status'=> true,
-            'html'  => $this->load->view('scenic_base/ajaxGoodsBase/ajaxData', $data, true)
+            'html'  => $this->load->view('scenic_base/ajaxScenicBase/ajaxData', $data, true)
         ));exit;
     }
 }

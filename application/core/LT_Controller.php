@@ -203,7 +203,7 @@ class LT_Controller extends CI_Controller
         $str = 'abcdefghgkmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUXWXYZ23456789';
         $word = '';
         for ($i=0; $i < $count; $i++) {
-            $word .= $str[mt_rand(0,strlen($str)-1)];
+            $word .= $str[mt_rand(0, strlen($str)-1)];
         }
         $vals = array(
             'word'       => $word,

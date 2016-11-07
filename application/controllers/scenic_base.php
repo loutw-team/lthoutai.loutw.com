@@ -144,15 +144,14 @@ class Scenic_base extends CS_Controller
      **/
     public function images($sid)
     {
-        $result = $this->scenic_base->findByGoodsId($sid);
+        $result = $this->scenic_base->findBySid($sid);
         if ($result->num_rows() <= 0) {
             $this->error('scenic_base/grid', '', '找不到产品相关信息！');
         }
         $scenicBase = $result->row(0);
         $data['scenicBase'] = $scenicBase;
-        $pics = $scenicBase->goods_img;
-        if (!empty($pics)) {
-            $goods_img = array_filter(explode('|', $pics));
+        if (!empty($scenicBase->pics)) {
+            $goods_img = array_filter(explode('|', $scenicBase->pics));
         } else {
             $goods_img = array();
         }

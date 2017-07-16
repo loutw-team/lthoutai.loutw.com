@@ -38,7 +38,7 @@
                         <div class="control-group add-pop-up-html">
                             <label class="control-label"><em>* </em>供 应 商</label>
                             <div class="controls">
-                                <input type="text" name="supplier_id" value="<?php echo $scenicBase->supplier_id ?>" class="m-wrap span8 supplieruid required" readonly="readonly" placeholder="双击选择供应商编号">
+                                <input type="text" name="uid" value="<?php echo $scenicBase->uid ?>" class="m-wrap span8 supplieruid required" readonly="readonly" placeholder="双击选择供应商编号">
                             </div>
                         </div>
                         <div class="control-group">

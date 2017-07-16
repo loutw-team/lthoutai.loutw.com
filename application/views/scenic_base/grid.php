@@ -60,7 +60,7 @@
                                 <div class="control-group">
                                     <label class="control-label">供 应 商</label>
                                     <div class="controls">
-                                        <input type="text" name="supplier_id" value="<?php echo $this->input->get('supplier_id') ?>" class="m-wrap span12" placeholder="请输入供应商编号">
+                                        <input type="text" name="uid" value="<?php echo $this->input->get('uid') ?>" class="m-wrap span12" placeholder="请输入供应商编号">
                                     </div>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
                                         <td><?php echo $starLevel[$item->star_level];?></td>
                                         <td><?php echo $item->address;?></td>
                                         <td><?php echo $item->open_time;?></td>
-                                        <td><?php echo $item->supplier_id;?></td>
+                                        <td><?php echo $item->uid;?></td>
                                         <td>
                                             <a href="javascript:;" class="modify-updown glyphicons no-js <?php if ($item->updown == 1):?>ok_2<?php else :?>remove_2<?php endif;?>" data-goods-id="<?php echo $item->sid;?>" data-flag="<?php echo $item->updown ?>">
                                                 <i></i>

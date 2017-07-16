@@ -42,8 +42,11 @@ class Scenic_base_model extends CI_Model
         if (!empty($params['scenic_search'])) {
             $this->db->where("((`scenic_name` LIKE '%{$params['scenic_search']}%') OR (`sid`='{$params['scenic_search']}'))");
         }
-        if (!empty($params['supplier_id'])) {
-            $this->db->where('supplier_id', $params['supplier_id']);
+        if (!empty($params['uid'])) {
+            $this->db->where('uid', $params['uid']);
+        }
+        if (!empty($params['star_level'])) {
+            $this->db->where('star_level', $params['star_level']);
         }
         if (!empty($params['scope'])) {
             $this->db->where('scope', $params['scope']);
@@ -81,7 +84,7 @@ class Scenic_base_model extends CI_Model
             'traffic'       => !empty($params['traffic']) ? $params['traffic'] : '',
             'attention'     => !empty($params['attention']) ? $params['attention'] : '',
             'pics'          => '',
-            'supplier_id'   => $params['supplier_id'],
+            'uid'            => $params['uid'],
             'province_id'   => $params['province_id'],
             'city_id'       => $params['city_id'],
             'district_id'   => $params['district_id'],
@@ -109,7 +112,7 @@ class Scenic_base_model extends CI_Model
             'info'          => $params['info'],
             'traffic'       => !empty($params['traffic']) ? $params['traffic'] : '',
             'attention'     => !empty($params['attention']) ? $params['attention'] : '',
-            'supplier_id'   => $params['supplier_id'],
+            'uid'            => $params['uid'],
             'province_id'   => $params['province_id'],
             'city_id'       => $params['city_id'],
             'district_id'   => $params['district_id'],

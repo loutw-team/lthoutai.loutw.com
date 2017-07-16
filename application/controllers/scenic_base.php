@@ -72,7 +72,7 @@ class Scenic_base extends CS_Controller
         $goods_id = $this->scenic_base->insert($params);
         $this->db->trans_complete();
 
-        if ($this->db->trans_status() === TRUE) {
+        if ($this->db->trans_status() === TRUE && $goods_id) {
             $this->session->set_flashdata('success', '保存成功!');
             $this->jsonMessage('', base_url('scenic_base/grid'));
         } else {
@@ -313,7 +313,7 @@ class Scenic_base extends CS_Controller
         if ($result->num_rows() <= 0) {
             $this->error('scenic_base/grid', null, '这个时间段没有记录');
         }
-        if($result->num_rows() > 10000){
+        if ($result->num_rows() > 10000){
             $this->error('scenic_base/grid', null, '由于导出的数据太多，请选择一个时间范围');
         }
         $arrayResult = $result->result_array();

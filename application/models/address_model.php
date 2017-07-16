@@ -1,36 +1,25 @@
 <?php
+class Address_model extends CI_Model
+{
+	private $table = 'address';
 
-class Mall_address_model extends CI_Model{
-    
-	private $table = 'mall_address';
-	
-	public function _init()
+	public function findByAddressId($address_id)
 	{
-	    $this->load->model('region_model', 'region');
-	}
-	
-	public function findById($address_id)
-	{
-	    return $this->db->get_where($this->table, array('address_id'=>$address_id));
+	    return $this->db->get_where($this->table, array('address_id' => $address_id));
 	}
 	
 	public function findByUid($uid)
 	{
-	    return $this->db->get_where($this->table, array('uid'=>$uid));
+	    return $this->db->get_where($this->table, array('uid' => $uid));
 	}
 	
-	public function insertMallAddress($postData) 
+	public function insert($postData)
 	{
-	    $this->load->model('region_model', 'region');
-	    $region = $this->region->getByRegionIds(array($postData['province_id'], $postData['city_id'], $postData['district_id']))->result();
 	    $data = array(
-	        'uid'              => $postData['uid'],
+	        'uid'               => $postData['uid'],
 	        'province_id'      => $postData['province_id'],
-	        'province_name'    => $region[0]->region_name,
 	        'city_id'          => $postData['city_id'],
-	        'city_name'        => $region[1]->region_name,
 	        'district_id'      => $postData['district_id'],
-	        'district_name'    => $region[2]->region_name,
 	        'detailed'         => $postData['detailed'],
 	        'code'             => $postData['code'],
 	        'receiver_name'    => $postData['receiver_name'],
@@ -51,16 +40,12 @@ class Mall_address_model extends CI_Model{
 	    return $this->db->affected_rows();
 	}
 	
-	public function updateMallAddress($postData)  
+	public function update($postData)
 	{
-	    $region = $this->region->getByRegionIds(array($postData['province_id'], $postData['city_id'], $postData['district_id']))->result();
 	    $data = array(
 	        'province_id'      => $postData['province_id'],
-	        'province_name'    => $region[0]->region_name,
 	        'city_id'          => $postData['city_id'],
-	        'city_name'        => $region[1]->region_name,
 	        'district_id'      => $postData['district_id'],
-	        'district_name'    => $region[2]->region_name,
 	        'detailed'         => $postData['detailed'],
 	        'code'             => $postData['code'],
 	        'receiver_name'    => $postData['receiver_name'],
@@ -77,9 +62,4 @@ class Mall_address_model extends CI_Model{
 	    $this->db->delete($this->table, $where);
 	    return $this->db->affected_rows();
 	}
-	
 }
-
-
-/* End of file Mall_address_model.php */
-/* Location: ./application/models/Mall_address_model.php */

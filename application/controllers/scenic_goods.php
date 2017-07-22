@@ -9,6 +9,7 @@ class Scenic_goods extends CS_Controller
         $this->load->library('pagination');
         $this->load->model('scenic_goods_model', 'scenic_goods');
         $this->load->model('scenic_cat_model', 'scenic_cat');
+        $this->load->model('scenic_api_source_model', 'scenic_api_source');
         $this->load->model('supplier_model', 'supplier');
         $this->load->model('region_model', 'region');
     }
@@ -34,6 +35,8 @@ class Scenic_goods extends CS_Controller
             $data['page_num'] = $pageNum;
             $data['isCheck'] = $this->isCheck;
             $data['isOnSale'] = $this->isOnSale;
+            $data['scenicApiSource'] = $this->scenic_api_source->find(true);
+            $data['scenicCat'] = $this->scenic_cat->find(true);
             $this->load->view('scenic_goods/grid', $data);
         }
     }
@@ -42,6 +45,8 @@ class Scenic_goods extends CS_Controller
     {
         $data['isCheck'] = $this->isCheck;
         $data['isOnSale'] = $this->isOnSale;
+        $data['scenicApiSource'] = $this->scenic_api_source->find(true);
+        $data['scenicCat'] = $this->scenic_cat->find(true);
         $this->load->view('scenic_goods/add', $data);
     }
 
@@ -54,7 +59,7 @@ class Scenic_goods extends CS_Controller
         if (!empty($error)) {
             $this->jsonMessage($error);
         }
-        if ($this->input->post('sid')) {
+        if ($this->input->post('goods_id')) {
             $this->editPost();
         } else {
             $this->addPost();
@@ -93,12 +98,14 @@ class Scenic_goods extends CS_Controller
         $data['scenicGoods'] = $scenicGoods;
         $data['isCheck']     = $this->isCheck;
         $data['isOnSale']    = $this->isOnSale;
+        $data['scenicApiSource'] = $this->scenic_api_source->find(true);
+        $data['scenicCat'] = $this->scenic_cat->find(true);
         $this->load->view('scenic_goods/edit', $data);
     }
 
     public function editPost()
     {
-        $sid = $this->input->post('sid');
+        $sid = $this->input->post('goods_id');
         $params = $this->input->post();
         $this->db->trans_start();
         $update = $this->scenic_goods->update($params);
@@ -126,6 +133,8 @@ class Scenic_goods extends CS_Controller
         $data['scenicGoods'] = $scenicGoods;
         $data['isCheck']     = $this->isCheck;
         $data['isOnSale']    = $this->isOnSale;
+        $data['scenicApiSource'] = $this->scenic_api_source->find(true);
+        $data['scenicCat'] = $this->scenic_cat->find(true);
         $this->load->view('scenic_goods/copy', $data);
     }
 
@@ -164,38 +173,27 @@ class Scenic_goods extends CS_Controller
         if ($this->validateParam($this->input->post('latitude'))) {
             $error[] = '纬度不可为空';
         }
-        if ($this->validateParam($this->input->post('updown'))) {
+        if ($this->validateParam($this->input->post('is_on_sale'))) {
             $error[] = '上下架状态必选.';
         }
-        //地区
-        $regionids = array($this->input->post('province_id'), $this->input->post('city_id'), $this->input->post('district_id'));
-        $region = $this->region->getByRegionIds($regionids);
-        if ($region->num_rows() < 3) {
-            $error[] = '城市地区请填写完整。';
-        }
-        $regionNames = array();
-        foreach ($region->result() as $item) {
-            $regionNames[] = $item->region_name;
-        }
-        $_POST['address'] = $regionNames[0] .' '.$regionNames[1].' '.$regionNames[2].' '.($this->input->post('address') ? $this->input->post('address') : ' ');
         return $error;
     }
 
     public function setUpdown()
     {
-        $sid = $this->input->post('goods_id');
+        $goods_id = $this->input->post('goods_id');
         $status = $this->input->post('flag');
         switch ($status) {
-            case '1': $updown = '2'; break;
-            case '2': $updown = '1'; break;
-            default : $updown = '1'; break;
+            case '1': $isOnSale = '2'; break;
+            case '2': $isOnSale = '1'; break;
+            default : $isOnSale = '1'; break;
         }
         $this->db->trans_start();
-        $isUpdate = $this->scenic_goods->updateBySid($sid, array('updown'=>$updown));
+        $isUpdate = $this->scenic_goods->updateBySid($goods_id, array('is_on_sale' => $isOnSale));
         $this->db->trans_complete();
         if ($this->db->trans_status() === TRUE && $isUpdate) {
             echo json_encode(array(
-                'flag' => $updown,
+                'flag' => $isOnSale,
             ));
         } else {
             echo json_encode(array(

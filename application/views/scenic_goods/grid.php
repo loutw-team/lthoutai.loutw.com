@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="portlet-body form">
-                    <form class="form-horizontal form-search" action="<?php echo base_url('scenic_base/grid') ?>" method="get">
+                    <form class="form-horizontal form-search" action="<?php echo base_url('scenic_goods/grid') ?>" method="get">
                         <div class="row-fluid">
                             <div class="span4">
                                 <div class="control-group">
@@ -34,7 +34,7 @@
                                     <div class="controls">
                                         <select name="star_level" class="m-wrap span12">
                                             <option value="0">全部</option>
-                                            <?php foreach ($starLevel as $key=>$value):?>
+                                            <?php foreach ($starLevel as $key => $value):?>
                                                 <option value="<?php echo $key?>" <?php if($key == $this->input->get('star_level')):?>selected="selected"<?php endif;?>><?php echo $value;?></option>
                                             <?php endforeach;?>
                                         </select>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">景点状态</label>
+                                    <label class="control-label">门票状态</label>
                                     <div class="controls">
                                         <select name="staus" class="m-wrap span12">
                                             <option value="0">全部</option>
@@ -60,7 +60,7 @@
                                 <div class="control-group">
                                     <label class="control-label">供 应 商</label>
                                     <div class="controls">
-                                        <input type="text" name="supplier_id" value="<?php echo $this->input->get('supplier_id') ?>" class="m-wrap span12" placeholder="请输入供应商编号">
+                                        <input type="text" name="uid" value="<?php echo $this->input->get('uid') ?>" class="m-wrap span12" placeholder="请输入供应商编号">
                                     </div>
                                 </div>
                             </div>
@@ -118,45 +118,44 @@
                                 <thead class="flip-content">
                                     <tr>
                                         <th width="2%"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes"></th>
-                                        <th width="5%">编号</th>
-                                        <th width="15%">景点名称</th>
-                                        <th width="8%">景点主题</th>
-                                        <th width="8%">景点星级</th>
-                                        <th width="16%">景点地址</th>
-                                        <th width="15%">开放时间</th>
-                                        <th width="6%">供应商</th>
+                                        <th width="8%">编号</th>
+                                        <th width="8%">票种</th>
+                                        <th width="15%">门票名称</th>
+                                        <th width="8%">价格</th>
+                                        <th width="8%">分润方式</th>
+                                        <th width="8%">票种来源</th>
                                         <th>状态</th>
+                                        <th width="6%">上下架</th>
                                         <th width="12%">添加时间</th>
-                                        <th width="15%">操作</th>
+                                        <th width="12%">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($page_list->result() as $item) : ?>
                                     <tr>
                                         <td><input type="checkbox" class="checkboxes" value="1" ></td>
-                                        <td><?php echo $item->sid;?></td>
-                                        <td><?php echo $item->scenic_name;?></td>
-                                        <td><?php echo $item->theme_id;?></td>
-                                        <td><?php echo $starLevel[$item->star_level];?></td>
-                                        <td><?php echo $item->address;?></td>
-                                        <td><?php echo $item->open_time;?></td>
-                                        <td><?php echo $item->supplier_id;?></td>
                                         <td>
-                                            <a href="javascript:;" class="modify-updown glyphicons no-js <?php if ($item->updown == 1):?>ok_2<?php else :?>remove_2<?php endif;?>" data-goods-id="<?php echo $item->sid;?>" data-flag="<?php echo $item->updown ?>">
+                                            <p>景区：<?php echo $item->sid;?></p>
+                                            <p>门票：<?php echo $item->goods_id;?></p>
+                                        </td>
+                                        <td><?php echo $item->cat_id;?></td>
+                                        <td><?php echo $item->goods_name;?></td>
+                                        <td><?php echo $item->price;?></td>
+                                        <td><?php echo $item->rate_id;?></td>
+                                        <td><?php echo $item->source_id;?></td>
+                                        <td><?php echo $isCheck[$item->is_check];?></td>
+                                        <td>
+                                            <a href="javascript:;" class="modify-updown glyphicons no-js <?php if ($item->is_on_sale == 1):?>ok_2<?php else :?>remove_2<?php endif;?>" data-goods-id="<?php echo $item->goods_id;?>" data-flag="<?php echo $item->is_on_sale ?>">
                                                 <i></i>
                                             </a>
                                         </td>
                                         <td><?php echo $item->created_at;?></td>
                                         <td>
                                             <p>
-                                                <a href="<?php echo base_url('scenic_goods/grid').'?sid='.$item->sid ?>" class="btn mini green">门票</a>
-                                                <a href="<?php echo base_url('scenic_base/images/'.$item->sid);?>" class="btn mini green">图片</a>
-                                            <p>
-                                            <p>
-                                                <a href="<?php echo base_url('scenic_base/edit/'.$item->sid) ?>" class="btn mini green">编辑</a>
-                                                <a href="<?php echo base_url('scenic_base/copy/'.$item->sid);?>" class="btn mini green">复制</a>
+                                                <a href="<?php echo base_url('scenic_goods/edit/'.$item->goods_id) ?>" class="btn mini green">编辑</a>
+                                                <a href="<?php echo base_url('scenic_goods/copy/'.$item->goods_id);?>" class="btn mini green">复制</a>
                                             </p>
-                                            <p><a href="<?php echo base_url('scenic_base/edit/'.$item->sid) ?>" class="btn mini green">预览</a></p>
+                                            <p><a href="<?php echo base_url('scenic_goods/edit/'.$item->sid) ?>" class="btn mini green">预览</a></p>
                                         </td>
                                     </tr>
                                     <?php endforeach;?>

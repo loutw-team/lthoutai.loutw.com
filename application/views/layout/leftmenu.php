@@ -90,6 +90,7 @@
                         <li><a href="<?php echo base_url('scenic_base/grid');?>">景点列表</a></li>
                         <li><a href="<?php echo base_url('scenic_goods/grid');?>">门票列表</a></li>
                         <li><a href="<?php echo base_url('scenic_theme/grid');?>">旅游主题</a></li>
+                        <li><a href="<?php echo base_url('scenic_cat/grid');?>">票种类型</a></li>
                         <li><a href="<?php echo base_url('scenic_api_source/grid');?>">接口来源</a></li>
                     </ul>
                 </li>

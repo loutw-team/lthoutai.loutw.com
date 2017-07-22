@@ -1,24 +1,24 @@
 <?php
-class Scenic_cat_model extends CI_Model
+class Scenic_api_source_model extends CI_Model
 {
-    private $table = 'scenic_cat';
+    private $table = 'scenic_api_source';
 
-    public function find($isArray=false)
+    public function find($isArray = false)
     {
         $result = $this->db->get($this->table);
         if ($isArray) {
             $rows = array();
             foreach ($result->result_array() as $row) {
-                $rows[$row['cat_id']] = $row;
+                $rows[$row['source_id']] = $row;
             }
             return $rows;
         }
         return $result;
     }
 
-    public function findByCatId($cat_id)
+    public function findBySourceId($source_id)
     {
-        $this->db->where('cat_id', $cat_id);
+        $this->db->where('source_id', $source_id);
         return $this->db->get($this->table);
     }
 
@@ -31,21 +31,18 @@ class Scenic_cat_model extends CI_Model
     public function page_list($page_num, $num, $params=array())
     {
         $this->checkWhereParam($params);
-        $this->db->order_by('sort', 'DESC');
+        $this->db->order_by('source_id', 'DESC');
         $this->db->limit($page_num, $num);
         return $this->db->get($this->table);
     }
 
     private function checkWhereParam($params = array())
     {
-        if (!empty($params['cat_id'])) {
-            $this->db->where('cat_id', $params['cat_id']);
+        if (!empty($params['source_name'])) {
+            $this->db->where('source_name', $params['source_name']);
         }
-        if (!empty($params['cat_name'])) {
-            $this->db->where('cat_name', $params['cat_name']);
-        }
-        if (!empty($params['is_show'])) {
-            $this->db->where('is_show', $params['is_show']);
+        if (!empty($params['purpose'])) {
+            $this->db->where('purpose', $params['purpose']);
         }
         if (!empty($params['start_time'])) {
             $this->db->where('created_at >=', $params['start_time'].' 00:00:00');
@@ -58,10 +55,11 @@ class Scenic_cat_model extends CI_Model
     public function insert($params=array())
     {
         $data = array(
-            'cat_name'    => $params['scenic_name'],
-            'is_show'     => $params['special'],
-            'sort'         => $params['uid'],
-            'created_at'  => date('Y-m-d H:i:s'),
+            'source_name'  => $params['scenic_name'],
+            'source_key'   => $params['source_key'],
+            'source_url'   => $params['source_url'],
+            'purpose'       => $params['purpose'],
+            'created_at'   => date('Y-m-d H:i:s'),
         );
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();
@@ -70,11 +68,12 @@ class Scenic_cat_model extends CI_Model
     public function update($params=array())
     {
         $data = array(
-            'cat_name'    => $params['scenic_name'],
-            'is_show'     => $params['special'],
-            'sort'         => $params['uid'],
+            'source_name'  => $params['scenic_name'],
+            'source_key'   => $params['source_key'],
+            'source_url'   => $params['source_url'],
+            'purpose'       => $params['purpose'],
         );
-        $this->db->where('cat_id', $params['cat_id']);
+        $this->db->where('source_id', $params['source_id']);
         return $this->db->update($this->table, $data);
     }
 }

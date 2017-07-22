@@ -10,6 +10,7 @@ class Scenic_goods extends CS_Controller
         $this->load->model('scenic_goods_model', 'scenic_goods');
         $this->load->model('scenic_cat_model', 'scenic_cat');
         $this->load->model('scenic_api_source_model', 'scenic_api_source');
+        $this->load->model('scenic_profit_rate_model', 'scenic_profit_rate');
         $this->load->model('supplier_model', 'supplier');
         $this->load->model('region_model', 'region');
     }
@@ -37,6 +38,7 @@ class Scenic_goods extends CS_Controller
             $data['isOnSale'] = $this->isOnSale;
             $data['scenicApiSource'] = $this->scenic_api_source->find(true);
             $data['scenicCat'] = $this->scenic_cat->find(true);
+            $data['scenicProfitRate'] = $this->scenic_profit_rate->find(true);
             $this->load->view('scenic_goods/grid', $data);
         }
     }
@@ -47,6 +49,7 @@ class Scenic_goods extends CS_Controller
         $data['isOnSale'] = $this->isOnSale;
         $data['scenicApiSource'] = $this->scenic_api_source->find(true);
         $data['scenicCat'] = $this->scenic_cat->find(true);
+        $data['scenicProfitRate'] = $this->scenic_profit_rate->find(true);
         $this->load->view('scenic_goods/add', $data);
     }
 
@@ -100,6 +103,7 @@ class Scenic_goods extends CS_Controller
         $data['isOnSale']    = $this->isOnSale;
         $data['scenicApiSource'] = $this->scenic_api_source->find(true);
         $data['scenicCat'] = $this->scenic_cat->find(true);
+        $data['scenicProfitRate'] = $this->scenic_profit_rate->find(true);
         $this->load->view('scenic_goods/edit', $data);
     }
 
@@ -135,6 +139,7 @@ class Scenic_goods extends CS_Controller
         $data['isOnSale']    = $this->isOnSale;
         $data['scenicApiSource'] = $this->scenic_api_source->find(true);
         $data['scenicCat'] = $this->scenic_cat->find(true);
+        $data['scenicProfitRate'] = $this->scenic_profit_rate->find(true);
         $this->load->view('scenic_goods/copy', $data);
     }
 

@@ -31,12 +31,12 @@
                             </div>
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">接口来源</label>
+                                    <label class="control-label">票种类型</label>
                                     <div class="controls">
-                                        <select name="source_id" class="m-wrap span12">
+                                        <select name="cat_id" class="m-wrap span12">
                                             <option value="0">全部</option>
-                                            <?php foreach ($scenicApiSource as $source_id => $value) : ?>
-                                                <option value="<?php echo $source_id;?>" <?php if ($this->input->get('source_id')==$source_id):?>selected="selected"<?php endif;?>><?php echo $value['source_name'] . ' -- ' . ($value['purpose'] == 1 ? '自动对接' : '二次下单')?></option>
+                                            <?php foreach ($scenicCat as $cat_id => $value) : ?>
+                                                <option value="<?php echo $cat_id;?>" <?php if ($this->input->get('cat_id')==$cat_id):?>selected="selected"<?php endif;?>><?php echo $value['cat_name'] ?></option>
                                             <?php endforeach;?>
                                         </select>
                                     </div>
@@ -44,12 +44,12 @@
                             </div>
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">审核状态</label>
+                                    <label class="control-label">接口来源</label>
                                     <div class="controls">
-                                        <select name="staus" class="m-wrap span12">
+                                        <select name="source_id" class="m-wrap span12">
                                             <option value="0">全部</option>
-                                            <?php foreach ($isCheck as $k=>$v):?>
-                                                <option value="<?php echo $k ?>" <?php if($k == $this->input->get('is_check')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
+                                            <?php foreach ($scenicApiSource as $source_id => $value) : ?>
+                                                <option value="<?php echo $source_id;?>" <?php if ($this->input->get('source_id')==$source_id):?>selected="selected"<?php endif;?>><?php echo $value['source_name'] . ' -- ' . ($value['purpose'] == 1 ? '自动对接' : '二次下单')?></option>
                                             <?php endforeach;?>
                                         </select>
                                     </div>
@@ -72,9 +72,22 @@
                             </div>
                             <div class="span4">
                                 <div class="control-group">
+                                    <label class="control-label">审核状态</label>
+                                    <div class="controls">
+                                        <select name="is_check" class="m-wrap span12">
+                                            <option value="0">全部</option>
+                                            <?php foreach ($isCheck as $k=>$v):?>
+                                                <option value="<?php echo $k ?>" <?php if($k == $this->input->get('is_check')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="control-group">
                                     <label class="control-label">上下架</label>
                                     <div class="controls">
-                                        <select name="staus" class="m-wrap span12">
+                                        <select name="is_on_sale" class="m-wrap span12">
                                             <option value="0">全部</option>
                                             <?php foreach ($isOnSale as $k=>$v):?>
                                                 <option value="<?php echo $k ?>" <?php if($k == $this->input->get('is_on_sale')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
@@ -83,6 +96,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row-fluid">
                             <div class="span4">
                                 <div class="control-group">
                                     <label class="control-label">添加时间</label>

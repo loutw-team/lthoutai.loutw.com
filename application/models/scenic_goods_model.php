@@ -36,29 +36,26 @@ class Scenic_goods_model extends CI_Model
         if (!empty($params['sid'])) {
             $this->db->where('sid', $params['sid']);
         }
+        if (!empty($params['cat_id'])) {
+            $this->db->where('cat_id', $params['cat_id']);
+        }
         if (!empty($params['scenic_goods'])) {
             $this->db->where('scenic_goods', $params['scenic_goods']);
         }
         if (!empty($param['goods_search'])) {
             $this->db->where("((`goods_name` LIKE '%{$param['goods_search']}%') OR (`goods_id`='{$param['goods_search']}'))");
         }
-        if (!empty($params['supplier_id'])) {
-            $this->db->where('supplier_id', $params['supplier_id']);
+        if (!empty($params['is_check'])) {
+            $this->db->where('is_check', $params['is_check']);
         }
-        if (!empty($params['scope'])) {
-            $this->db->where('scope', $params['scope']);
+        if (!empty($params['is_on_sale'])) {
+            $this->db->where('is_on_sale', $params['is_on_sale']);
         }
-        if (!empty($params['status'])) {
-            $this->db->where('status', $params['status']);
+        if (!empty($params['rate_id'])) {
+            $this->db->where('rate_id', $params['rate_id']);
         }
-        if (!empty($params['province_id'])) {
-            $this->db->where('province_id', $params['province_id']);
-        }
-        if (!empty($params['city_id'])) {
-            $this->db->where('city_id', $params['city_id']);
-        }
-        if (!empty($params['district_id'])) {
-            $this->db->where('district_id', $params['district_id']);
+        if (!empty($params['source_id'])) {
+            $this->db->where('source_id', $params['source_id']);
         }
         if (!empty($params['start_time'])) {
             $this->db->where('created_at >=', $params['start_time'].' 00:00:00');

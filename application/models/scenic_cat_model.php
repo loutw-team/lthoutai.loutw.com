@@ -58,7 +58,7 @@ class Scenic_cat_model extends CI_Model
     public function insert($params=array())
     {
         $data = array(
-            'cat_name'    => $params['scenic_name'],
+            'cat_name'    => $params['cat_name'],
             'is_show'     => $params['is_show'],
             'sort'         => $params['sort'],
             'created_at'  => date('Y-m-d H:i:s'),
@@ -70,7 +70,7 @@ class Scenic_cat_model extends CI_Model
     public function update($params=array())
     {
         $data = array(
-            'cat_name'    => $params['scenic_name'],
+            'cat_name'    => $params['cat_name'],
             'is_show'     => $params['is_show'],
             'sort'         => $params['sort'],
         );

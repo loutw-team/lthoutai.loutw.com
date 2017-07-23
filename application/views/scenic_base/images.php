@@ -25,14 +25,14 @@
                                 <div class="pull-left">
                                     <input type="hidden" name="sid" value="<?php echo $scenicBase->sid; ?>"/>
                                     <input type="hidden" name="pics" value="<?php echo $scenicBase->pics; ?>"/>
-                                    <input type="file" name="goods_img[]" class="checkPicture required" multiple="multiple"/>
+                                    <input type="file" name="pics[]" class="checkPicture required" multiple="multiple"/>
                                     <button class="btn green" type="submit"><i class="icon-plus"></i> 上传</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <hr class="clearfix"/>
-                    <?php if (count($pics)>0) :?>
+                    <?php if (count($pics) > 0) :?>
                         <?php $i = 1;foreach ($pics as $val):?>
                              <?php if (($i - 1) % 4 == 0) : ?><div class="row-fluid"><?php endif; ?>
                              <div class="span3">

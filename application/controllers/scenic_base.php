@@ -198,7 +198,7 @@ class Scenic_base extends CS_Controller
         if ($result->num_rows() <= 0) {
             $this->error('scenic_base/grid', '', '找不到产品相关信息！');
         }
-        $scenicBase = $result->row();
+        $scenicBase = $result->row(0);
         $scenicImg = str_replace($imageName.'|', '', $scenicBase->pics);
         $resultId = $this->scenic_base->updateBySid($sid, array('pic'=>$scenicImg));
         $this->deleteOldfileName($imageName, 'scenic');
@@ -215,15 +215,15 @@ class Scenic_base extends CS_Controller
     public function mainImage()
     {
         $sid = $this->input->get('sid');
-        $result = $this->scenic_base->findByGoodsId($sid);
+        $result = $this->scenic_base->findBySid($sid);
         if ($result->num_rows() <= 0) {
             $this->error('scenic_base/grid', '', '找不到产品相关信息！');
         }
-        $mall_goods = $result->row();
+        $scenicBase = $result->row(0);
         $image_name = $this->input->get('image_name');
-        $pics = str_replace($image_name.'|', '', $mall_goods->goods_img);
-        $params['goods_img'] = $image_name.'|'.$pics;
-        $params['goods_id'] = $sid;
+        $pics = str_replace($image_name.'|', '', $scenicBase->pics);
+        $params['pics'] = $image_name.'|'.$pics;
+        $params['sid'] = $sid;
         $resultId = $this->scenic_base->updateBySid($params);
         if (!$resultId) {
             $this->error('scenic_base/images', $sid, '删除失败');

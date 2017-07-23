@@ -151,11 +151,11 @@ class Scenic_base extends CS_Controller
         $scenicBase = $result->row(0);
         $data['scenicBase'] = $scenicBase;
         if (!empty($scenicBase->pics)) {
-            $goods_img = array_filter(explode('|', $scenicBase->pics));
+            $pics = array_filter(explode('|', $scenicBase->pics));
         } else {
-            $goods_img = array();
+            $pics = array();
         }
-        $data['goods_img'] = $goods_img;
+        $data['pics'] = $pics;
         $data['sid'] = $sid;
         $this->load->view('scenic_base/images', $data);
     }
@@ -173,7 +173,7 @@ class Scenic_base extends CS_Controller
         if (empty($_FILES['goods_img']['name'])) {
             $this->error('scenic_base/images', $sid, '请选择图片上传！');
         }
-        $imageData = $this->dealWithMoreImages('goods_img', '', 'scenic');
+        $imageData = $this->dealWithMoreImages('pics', '', 'scenic');
         if ($imageData == false) {
             $this->error('scenic_base/images', $sid, '请选择图片上传！');
         }

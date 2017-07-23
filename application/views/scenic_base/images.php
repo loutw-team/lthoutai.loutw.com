@@ -21,7 +21,7 @@
                     <div class="row-fluid">
                         <div class="span4"></div>
                         <div class="span8">
-                            <form class="line-form" action="<?php echo base_url('mall_goods_base/saveImages'); ?>" method="post"  enctype="multipart/form-data">
+                            <form class="line-form" action="<?php echo base_url('scenic_base/saveImages'); ?>" method="post"  enctype="multipart/form-data">
                                 <div class="pull-left">
                                     <input type="hidden" name="sid" value="<?php echo $scenicBase->sid; ?>"/>
                                     <input type="hidden" name="pics" value="<?php echo $scenicBase->pics; ?>"/>
@@ -32,8 +32,8 @@
                         </div>
                     </div>
                     <hr class="clearfix"/>
-                    <?php if (count($goods_img)>0) :?>
-                        <?php $i = 1;foreach ($goods_img as $val):?>
+                    <?php if (count($pics)>0) :?>
+                        <?php $i = 1;foreach ($pics as $val):?>
                              <?php if (($i - 1) % 4 == 0) : ?><div class="row-fluid"><?php endif; ?>
                              <div class="span3">
                                 <div class="item" style="height:240px">
@@ -50,7 +50,7 @@
                                     <?php endif;?>
                                 </div>
                              </div>
-                             <?php if (($i) % 4 == 0 || $i==count($goods_img)) : ?></div><?php endif; ?>
+                             <?php if (($i) % 4 == 0 || $i==count($pics)) : ?></div><?php endif; ?>
                         <?php $i++;endforeach;?>
                    <?php endif;?>
                 </div>

@@ -39,7 +39,10 @@ class Scenic_api_source_model extends CI_Model
     private function checkWhereParam($params = array())
     {
         if (!empty($params['source_name'])) {
-            $this->db->where('source_name', $params['source_name']);
+            $this->db->like('source_name', $params['source_name']);
+        }
+        if (!empty($params['source_key'])) {
+            $this->db->where('source_key', $params['source_key']);
         }
         if (!empty($params['purpose'])) {
             $this->db->where('purpose', $params['purpose']);
@@ -55,9 +58,9 @@ class Scenic_api_source_model extends CI_Model
     public function insert($params=array())
     {
         $data = array(
-            'source_name'  => $params['scenic_name'],
+            'source_name'  => $params['source_name'],
             'source_key'   => $params['source_key'],
-            'source_url'   => $params['source_url'],
+            'source_url'   => !empty($params['source_url']) ? $params['source_url'] : '',
             'purpose'       => $params['purpose'],
             'created_at'   => date('Y-m-d H:i:s'),
         );
@@ -68,9 +71,9 @@ class Scenic_api_source_model extends CI_Model
     public function update($params=array())
     {
         $data = array(
-            'source_name'  => $params['scenic_name'],
+            'source_name'  => $params['source_name'],
             'source_key'   => $params['source_key'],
-            'source_url'   => $params['source_url'],
+            'source_url'   => !empty($params['source_url']) ? $params['source_url'] : '',
             'purpose'       => $params['purpose'],
         );
         $this->db->where('source_id', $params['source_id']);

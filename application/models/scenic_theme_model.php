@@ -42,7 +42,7 @@ class Scenic_theme_model extends CI_Model
             $this->db->where('theme_id', $params['theme_id']);
         }
         if (!empty($params['theme_name'])) {
-            $this->db->where('theme_name', $params['theme_name']);
+            $this->db->like('theme_name', $params['theme_name']);
         }
         if (!empty($params['is_show'])) {
             $this->db->where('is_show', $params['is_show']);

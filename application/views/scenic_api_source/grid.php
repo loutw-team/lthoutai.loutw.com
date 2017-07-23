@@ -2,8 +2,8 @@
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span12">
-            <h3 class="page-title">景区管理<small> 票种类型</small></h3>
-            <?php echo breadcrumb(array('景区管理', '景区产品', '票种类型')); ?>
+            <h3 class="page-title">景区管理<small> 接口来源</small></h3>
+            <?php echo breadcrumb(array('景区管理', '景区产品', '接口来源')); ?>
         </div>
     </div>
     <?php echo execute_alert_message() ?>
@@ -18,24 +18,32 @@
                     </div>
                 </div>
                 <div class="portlet-body form">
-                    <form class="form-horizontal form-search" action="<?php echo base_url('scenic_cat/grid') ?>" method="get">
+                    <form class="form-horizontal form-search" action="<?php echo base_url('scenic_api_source/grid') ?>" method="get">
                         <div class="row-fluid">
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">票种名称</label>
+                                    <label class="control-label">来源名称</label>
                                     <div class="controls">
-                                        <input type="text" name="cat_name" value="<?php echo $this->input->get('cat_name') ?>" class="m-wrap span12" placeholder="请输入景区编号或景区名称">
+                                        <input type="text" name="source_name" value="<?php echo $this->input->get('source_name') ?>" class="m-wrap span12">
                                     </div>
                                 </div>
                             </div>
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">票种状态</label>
+                                    <label class="control-label">来源标识</label>
                                     <div class="controls">
-                                        <select name="is_show" class="m-wrap span12">
+                                        <input type="text" name="source_key" value="<?php echo $this->input->get('source_key') ?>" class="m-wrap span12">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label">对接方式</label>
+                                    <div class="controls">
+                                        <select name="purpose" class="m-wrap span12">
                                             <option value="0">全部</option>
-                                            <?php foreach ($isShow as $k=>$v):?>
-                                                <option value="<?php echo $k ?>" <?php if($k == $this->input->get('is_show')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
+                                            <?php foreach ($purpose as $k=>$v):?>
+                                                <option value="<?php echo $k ?>" <?php if($k == $this->input->get('purpose')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
                                             <?php endforeach;?>
                                         </select>
                                     </div>
@@ -60,7 +68,7 @@
                 <div class="portlet-body flip-scroll">
                     <div class="dataTables_wrapper form-inline">
                         <div class="clearfix">
-                            <a href="<?php echo base_url('scenic_cat/add') ?>" class="add-button-link">
+                            <a href="<?php echo base_url('scenic_api_source/add') ?>" class="add-button-link">
                                 <div class="btn-group">
                                     <button class="btn green"><i class="icon-plus"></i> 添加</button>
                                 </div>
@@ -72,24 +80,26 @@
                                     <tr>
                                         <th width="2%"><input type="checkbox" class="group-checkable" data-set="#sample_1 .checkboxes"></th>
                                         <th width="5%">编号</th>
-                                        <th width="15%">票种名称</th>
-                                        <th width="8%">票种状态</th>
-                                        <th width="8%">排序</th>
+                                        <th width="15%">来源名称</th>
+                                        <th width="15%">来源标识</th>
+                                        <th width="20%">来源URL</th>
+                                        <th width="8%">对接方式</th>
                                         <th width="12%">添加时间</th>
-                                        <th width="15%">操作</th>
+                                        <th width="8%">操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($page_list->result() as $item) : ?>
                                     <tr>
-                                        <td><input type="checkbox" class="checkboxes" value="<?php echo $item->cat_id ?>" ></td>
-                                        <td><?php echo $item->cat_id;?></td>
-                                        <td><?php echo $item->cat_name;?></td>
-                                        <td><?php echo $isShow[$item->is_show];?></td>
-                                        <td><?php echo $item->sort;?></td>
+                                        <td><input type="checkbox" class="checkboxes" value="<?php echo $item->source_id ?>" ></td>
+                                        <td><?php echo $item->source_id;?></td>
+                                        <td><?php echo $item->source_name;?></td>
+                                        <td><?php echo $item->source_key;?></td>
+                                        <td><?php echo $item->source_url;?></td>
+                                        <td><?php echo $purpose[$item->purpose];?></td>
                                         <td><?php echo $item->created_at;?></td>
                                         <td>
-                                            <a href="<?php echo base_url('scenic_cat/edit/'.$item->cat_id) ?>" class="btn mini green">编辑</a>
+                                            <a href="<?php echo base_url('scenic_api_source/edit/'.$item->source_id) ?>" class="btn mini green">编辑</a>
                                         </td>
                                     </tr>
                                     <?php endforeach;?>

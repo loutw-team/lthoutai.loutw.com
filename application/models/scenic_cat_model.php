@@ -42,7 +42,7 @@ class Scenic_cat_model extends CI_Model
             $this->db->where('cat_id', $params['cat_id']);
         }
         if (!empty($params['cat_name'])) {
-            $this->db->where('cat_name', $params['cat_name']);
+            $this->db->like('cat_name', $params['cat_name']);
         }
         if (!empty($params['is_show'])) {
             $this->db->where('is_show', $params['is_show']);

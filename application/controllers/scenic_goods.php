@@ -1,8 +1,9 @@
 <?php
 class Scenic_goods extends CS_Controller
 {
-    private $isCheck = array(1 => '待审核', 2 => '通过', 3 => '未通过');
+    private $isCheck = array(1 => '待审核', 2 => '通过审核', 3 => '审核失败');
     private $isOnSale = array(1 => '上架', 2 => '下架');
+    private $bookingLimit = array(0 => '无', 1 => '1天', 2 => '1周', 3 => '1月', 4 => '1年');
 
     public function _init()
     {
@@ -45,8 +46,10 @@ class Scenic_goods extends CS_Controller
 
     public function add()
     {
+        $data['sid']  = $this->input->get('sid');
         $data['isCheck'] = $this->isCheck;
         $data['isOnSale'] = $this->isOnSale;
+        $data['bookingLimit'] = $this->bookingLimit;
         $data['scenicApiSource'] = $this->scenic_api_source->find(true);
         $data['scenicCat'] = $this->scenic_cat->find(true);
         $data['scenicProfitRate'] = $this->scenic_profit_rate->find(true);
@@ -81,7 +84,7 @@ class Scenic_goods extends CS_Controller
 
         if ($this->db->trans_status() === TRUE) {
             $this->session->set_flashdata('success', '保存成功!');
-            $this->jsonMessage('', base_url('scenic_goods/grid'));
+            $this->jsonMessage('', base_url('scenic_goods/grid').'?sid='.$this->input->post('sid'));
         } else {
             $this->jsonMessage('保存失败！');
         }
@@ -91,9 +94,9 @@ class Scenic_goods extends CS_Controller
      * 编辑
      * @param unknown $goods_id
      */
-    public function edit($sid)
+    public function edit($goods_id)
     {
-        $result = $this->scenic_goods->findByGoodsId($sid);
+        $result = $this->scenic_goods->findByGoodsId($goods_id);
         if ($result->num_rows() <= 0) {
             $this->error('scenic_goods/grid', '', '找不到产品相关信息！');
         }
@@ -101,6 +104,7 @@ class Scenic_goods extends CS_Controller
         $data['scenicGoods'] = $scenicGoods;
         $data['isCheck']     = $this->isCheck;
         $data['isOnSale']    = $this->isOnSale;
+        $data['bookingLimit'] = $this->bookingLimit;
         $data['scenicApiSource'] = $this->scenic_api_source->find(true);
         $data['scenicCat'] = $this->scenic_cat->find(true);
         $data['scenicProfitRate'] = $this->scenic_profit_rate->find(true);
@@ -117,19 +121,19 @@ class Scenic_goods extends CS_Controller
 
         if ($this->db->trans_status() === TRUE) {
             $this->session->set_flashdata('success', '编辑成功!');
-            $this->jsonMessage('', base_url('scenic_goods/grid'));
+            $this->jsonMessage('', base_url('scenic_goods/grid').'?sid='.$this->input->post('sid'));
         } else {
             $this->jsonMessage('编辑失败！');
         }
     }
 
     /**
-     * 编辑
+     * 复制
      * @param unknown $goods_id
      */
-    public function copy($sid)
+    public function copy($goods_id)
     {
-        $result = $this->scenic_goods->findByGoodsId($sid);
+        $result = $this->scenic_goods->findByGoodsId($goods_id);
         if ($result->num_rows() <= 0) {
             $this->error('scenic_goods/grid', '', '找不到产品相关信息！');
         }
@@ -137,6 +141,7 @@ class Scenic_goods extends CS_Controller
         $data['scenicGoods'] = $scenicGoods;
         $data['isCheck']     = $this->isCheck;
         $data['isOnSale']    = $this->isOnSale;
+        $data['bookingLimit'] = $this->bookingLimit;
         $data['scenicApiSource'] = $this->scenic_api_source->find(true);
         $data['scenicCat'] = $this->scenic_cat->find(true);
         $data['scenicProfitRate'] = $this->scenic_profit_rate->find(true);
@@ -150,40 +155,61 @@ class Scenic_goods extends CS_Controller
     public function validate()
     {
         $error = array();
-        if ($this->validateParam($this->input->post('scenic_name'))) {
-            $error[] = '景点名称不可为空！';
+        if ($this->validateParam($this->input->post('goods_name'))) {
+            $error[] = '门票名称不可为空！';
         }
-        $supplier_id = $this->input->post('supplier_id');
-        if (!empty($supplier_id)) {//为零时不判断，默认自营产品
-            $userQuery = $this->supplier->findByUid($supplier_id);
-            if ($userQuery->num_rows() <= 0) {
-                $error[] = '请填写正确的供应商UID';
-            }
+        if ($this->validateParam($this->input->post('cat_id'))) {
+            $error[] = '票种不可为空！';
         }
-        if ($this->validateParam($this->input->post('special'))) {
-            $error[] = '景点特色不可为空！';
+        if ($this->validateParam($this->input->post('include'))) {
+            $error[] = '费用包含不可为空！';
         }
-        if ($this->validateParam($this->input->post('open_time'))) {
-            $error[] = '开放时间不可为空！';
+        if ($this->validateParam($this->input->post('exclude'))) {
+            $error[] = '费用不含不可为空！';
         }
-        if ($this->validateParam($this->input->post('info'))) {
-            $error[] = '景点简介不可为空！';
+        if ($this->validateParam($this->input->post('refund_info'))) {
+            $error[] = '退款说明不可为空！';
         }
-        if ($this->validateParam($this->input->post('locType'))) {
-            $error[] = '地图类型必选';
+        if ($this->validateParam($this->input->post('park_way'))) {
+            $error[] = '入园方式不可为空！';
         }
-        if ($this->validateParam($this->input->post('longitude'))) {
-            $error[] = '经度不可为空';
+        if ($this->validateParam($this->input->post('park_address'))) {
+            $error[] = '取票地址不可为空！';
         }
-        if ($this->validateParam($this->input->post('latitude'))) {
-            $error[] = '纬度不可为空';
-        }
-        if ($this->validateParam($this->input->post('is_on_sale'))) {
-            $error[] = '上下架状态必选.';
+        if ($this->validateParam($this->input->post('rate_id'))) {
+            $error[] = '分润方式不可为空！';
         }
         return $error;
     }
 
+    public function isCheck()
+    {
+        $goods_id = $this->input->post('goods_id');
+        $is_check = $this->input->post('is_check');
+        switch ($is_check) {
+            case '1': $isCheck = '1'; break;
+            case '2': $isCheck = '2'; break;
+            case '3': $isCheck = '3'; break;
+            default : $isCheck = '1'; break;
+        }
+        $this->db->trans_start();
+        $isUpdate = $this->scenic_goods->updateByGoodsId($goods_id, array('is_check' => $isCheck));
+        $this->db->trans_complete();
+        if ($this->db->trans_status() === TRUE && $isUpdate) {
+            echo json_encode(array(
+                'status' => $is_check,
+            ));
+        } else {
+            echo json_encode(array(
+                'status' => 3,
+            ));
+        }
+        exit;
+    }
+
+    /**
+     * 上下架
+     */
     public function setUpdown()
     {
         $goods_id = $this->input->post('goods_id');
@@ -194,7 +220,7 @@ class Scenic_goods extends CS_Controller
             default : $isOnSale = '1'; break;
         }
         $this->db->trans_start();
-        $isUpdate = $this->scenic_goods->updateBySid($goods_id, array('is_on_sale' => $isOnSale));
+        $isUpdate = $this->scenic_goods->updateByGoodsId($goods_id, array('is_on_sale' => $isOnSale));
         $this->db->trans_complete();
         if ($this->db->trans_status() === TRUE && $isUpdate) {
             echo json_encode(array(
@@ -221,32 +247,6 @@ class Scenic_goods extends CS_Controller
         array_unshift($arrayResult, array('景点编号', '景点名称', '景点特色', '景点星级', '主题', '开放时间', '供应商编号', '地址', '地图类型', '经度', '纬度', '状态1-上架2-下架', '添加时间', '更新时间'));
         $this->load->library('excel');
         $this->excel->addArray($arrayResult);
-        $this->excel->generateXML(date('Ymd').'景点列表');
-    }
-
-    /**
-     * 获取
-     * @param number $pg
-     */
-    public function ajaxScenicGoods($pg = 1)
-    {
-        $pageNum = 10;
-        $num = ($pg-1)*$pageNum;
-        $config['per_page'] = $pageNum;
-        $config['first_url'] = base_url('scenic_goods/ajaxGetGoods').$this->pageGetParam($this->input->get());
-        $config['suffix'] = $this->pageGetParam($this->input->get());
-        $config['base_url'] = base_url('scenic_goods/ajaxGetGoods');
-        $config['total_rows'] = $this->scenic_goods->total($this->input->get());
-        $config['uri_segment'] = 3;
-        $this->pagination->initialize($config);
-        $data['pg_link']   = $this->pagination->create_links();
-        $data['page_list'] = $this->scenic_goods->page_list($pageNum, $num, $this->input->get());
-        $data['all_rows']  = $config['total_rows'];
-        $data['pg_now']    = $pg;
-        $data['page_num']  = $pageNum;
-        echo json_encode(array(
-            'status'=> true,
-            'html'  => $this->load->view('scenic_goods/ajaxScenicGoods/ajaxData', $data, true)
-        ));exit;
+        $this->excel->generateXML(date('Ymd').'门票列表');
     }
 }

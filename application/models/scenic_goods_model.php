@@ -36,11 +36,11 @@ class Scenic_goods_model extends CI_Model
         if (!empty($params['sid'])) {
             $this->db->where('sid', $params['sid']);
         }
-        if (!empty($params['scenic_name'])) {
-            $this->db->where('scenic_name', $params['scenic_name']);
+        if (!empty($params['scenic_goods'])) {
+            $this->db->where('scenic_goods', $params['scenic_goods']);
         }
-        if (!empty($param['scenic_search'])) {
-            $this->db->where("((`scenic_name` LIKE '%{$param['scenic_search']}%') OR (`sid`='{$param['scenic_search']}'))");
+        if (!empty($param['goods_search'])) {
+            $this->db->where("((`goods_name` LIKE '%{$param['goods_search']}%') OR (`goods_id`='{$param['goods_search']}'))");
         }
         if (!empty($params['supplier_id'])) {
             $this->db->where('supplier_id', $params['supplier_id']);
@@ -71,27 +71,45 @@ class Scenic_goods_model extends CI_Model
     public function insert($params=array())
     {
         $data = array(
-            'scenic_name'   => $params['scenic_name'],
-            'special'       => $params['special'],
-            'star_level'    => $params['star_level'],
-            'theme_id'      => $params['theme_id'],
-            'open_time'     => $params['open_time'],
-            'notice'        => $params['notice'],
-            'info'          => $params['info'],
-            'traffic'       => !empty($params['traffic']) ? $params['traffic'] : '',
-            'attention'     => !empty($params['attention']) ? $params['attention'] : '',
-            'pics'          => '',
-            'supplier_id'   => $params['supplier_id'],
-            'province_id'   => $params['province_id'],
-            'city_id'       => $params['city_id'],
-            'district_id'   => $params['district_id'],
-            'address'       => $params['address'],
-            'locType'       => $params['locType'],
-            'longitude'     => $params['longitude'],
-            'latitude'      => $params['latitude'],
-            'updown'        => $params['updown'],
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
+            'sid'                => $params['sid'],
+            'goods_name'        => $params['goods_name'],
+            'cat_id'             => $params['cat_id'],
+            'include'            => $params['include'],
+            'exclude'            => $params['exclude'],
+            'refund_info'       => $params['refund_info'],
+            'park_way'           => $params['park_way'],
+            'park_address'      => $params['park_address'],
+            'in_time'            => !empty($params['in_time']) ? $params['in_time'] : '',
+            'out_time'           => !empty($params['out_time']) ? $params['out_time'] : '',
+            'advance_date'      => !empty($params['advance_date']) ? $params['advance_date'] : 0,
+            'advance_time'      => !empty($params['advance_time']) ? $params['advance_time'] : '',
+            'use_delay'          => !empty($params['use_delay']) ? $params['use_delay'] : 0,
+            'validity_days'     => !empty($params['validity_days']) ? $params['validity_days'] : 0,
+            'price'              => $params['price'],
+            'is_edit'            => $params['is_edit'],
+            'edit_day'           => !empty($params['edit_day']) ? $params['edit_day'] : 0,
+            'edit_time'          => !empty($params['edit_time']) ? $params['edit_time'] : '',
+            'is_refund'          => $params['is_refund'],
+            'refund_day'         => !empty($params['refund_day']) ? $params['refund_day'] : 0,
+            'refund_time'        => !empty($params['refund_time']) ? $params['refund_time'] : '',
+            'is_partly_refund'  => $params['is_partly_refund'],
+            'buyers'              => !empty($params['buyers']) ? $params['buyers'] : '',
+            'unbuyers'            => !empty($params['unbuyers']) ? $params['unbuyers'] : '',
+            'sfz_limit_days'     => $params['sfz_limit_days'],
+            'sfz_limit_count'    => !empty($params['sfz_limit_count']) ? $params['sfz_limit_count'] : 0,
+            'phone_limit_days'   => $params['phone_limit_days'],
+            'phone_limit_count' => !empty($params['phone_limit_count']) ? $params['phone_limit_count'] : 0,
+            'min_buy_count'      => !empty($params['min_buy_count']) ? $params['min_buy_count'] : 1,
+            'max_buy_count'      => !empty($params['max_buy_count']) ? $params['max_buy_count'] : 999999,
+            'rate_id'             => $params['rate_id'],
+            'source_id'           => $params['source_id'],
+            'api_sid'             => !empty($params['api_sid']) ? $params['api_sid'] : 0,
+            'api_goods_id'       => !empty($params['api_goods_id']) ? $params['api_goods_id'] : '',
+            'is_check'            => $params['is_check'],
+            'is_on_sale'          => $params['is_on_sale'],
+            'order_cancel'        => !empty($params['order_cancel']) ? $params['order_cancel'] : 0,
+            'created_at'          => date('Y-m-d H:i:s'),
+            'updated_at'          => date('Y-m-d H:i:s'),
         );
         $this->db->insert($this->table, $data);
         return $this->db->insert_id();
@@ -100,37 +118,59 @@ class Scenic_goods_model extends CI_Model
     public function update($params=array())
     {
         $data = array(
-            'scenic_name'   => $params['scenic_name'],
-            'special'       => $params['special'],
-            'star_level'    => $params['star_level'],
-            'theme_id'      => $params['theme_id'],
-            'open_time'     => $params['open_time'],
-            'notice'        => $params['notice'],
-            'info'          => $params['info'],
-            'traffic'       => !empty($params['traffic']) ? $params['traffic'] : '',
-            'attention'     => !empty($params['attention']) ? $params['attention'] : '',
-            'supplier_id'   => $params['supplier_id'],
-            'province_id'   => $params['province_id'],
-            'city_id'       => $params['city_id'],
-            'district_id'   => $params['district_id'],
-            'address'       => $params['address'],
-            'locType'       => $params['locType'],
-            'longitude'     => $params['longitude'],
-            'latitude'      => $params['latitude'],
-            'updown'        => $params['updown'],
-            'updated_at'    => date('Y-m-d H:i:s'),
+            'sid'                => $params['sid'],
+            'goods_name'        => $params['goods_name'],
+            'cat_id'             => $params['cat_id'],
+            'include'            => $params['include'],
+            'exclude'            => $params['exclude'],
+            'refund_info'       => $params['refund_info'],
+            'park_way'           => $params['park_way'],
+            'park_address'      => $params['park_address'],
+            'in_time'            => !empty($params['in_time']) ? $params['in_time'] : '',
+            'out_time'           => !empty($params['out_time']) ? $params['out_time'] : '',
+            'advance_date'      => !empty($params['advance_date']) ? $params['advance_date'] : 0,
+            'advance_time'      => !empty($params['advance_time']) ? $params['advance_time'] : '',
+            'use_delay'          => !empty($params['use_delay']) ? $params['use_delay'] : 0,
+            'validity_days'     => !empty($params['validity_days']) ? $params['validity_days'] : 0,
+            'price'              => $params['price'],
+            'is_edit'            => $params['is_edit'],
+            'edit_day'           => !empty($params['edit_day']) ? $params['edit_day'] : 0,
+            'edit_time'          => !empty($params['edit_time']) ? $params['edit_time'] : '',
+            'is_refund'          => $params['is_refund'],
+            'refund_day'         => !empty($params['refund_day']) ? $params['refund_day'] : 0,
+            'refund_time'        => !empty($params['refund_time']) ? $params['refund_time'] : '',
+            'is_partly_refund'  => $params['is_partly_refund'],
+            'buyers'              => !empty($params['buyers']) ? $params['buyers'] : '',
+            'unbuyers'            => !empty($params['unbuyers']) ? $params['unbuyers'] : '',
+            'sfz_limit_days'     => $params['sfz_limit_days'],
+            'sfz_limit_count'    => !empty($params['sfz_limit_count']) ? $params['sfz_limit_count'] : 0,
+            'phone_limit_days'   => $params['phone_limit_days'],
+            'phone_limit_count' => !empty($params['phone_limit_count']) ? $params['phone_limit_count'] : 0,
+            'min_buy_count'      => !empty($params['min_buy_count']) ? $params['min_buy_count'] : 1,
+            'max_buy_count'      => !empty($params['max_buy_count']) ? $params['max_buy_count'] : 999999,
+            'rate_id'             => $params['rate_id'],
+            'source_id'           => $params['source_id'],
+            'api_sid'             => !empty($params['api_sid']) ? $params['api_sid'] : 0,
+            'api_goods_id'       => !empty($params['api_goods_id']) ? $params['api_goods_id'] : '',
+            'is_check'            => $params['is_check'],
+            'is_on_sale'          => $params['is_on_sale'],
+            'order_cancel'        => !empty($params['order_cancel']) ? $params['order_cancel'] : 0,
+            'updated_at'          => date('Y-m-d H:i:s'),
         );
-        $this->db->where('sid', $params['sid']);
+        $this->db->where('goods_id', $params['goods_id']);
         return $this->db->update($this->table, $data);
     }
 
-    public function updateByGoodsId($sid, $params = array())
+    public function updateByGoodsId($goods_id, $params = array())
     {
         $data = array();
-        if (!empty($params)) {
-            $data['updown'] = $params['updown'];
+        if (!empty($params['is_check'])) {
+            $data['is_check'] = $params['is_check'];
         }
-        $this->db->where('goods_id', $sid);
+        if (!empty($params['is_on_sale'])) {
+            $data['is_on_sale'] = $params['is_on_sale'];
+        }
+        $this->db->where('goods_id', $goods_id);
         return $this->db->update($this->table, $data);
     }
 }

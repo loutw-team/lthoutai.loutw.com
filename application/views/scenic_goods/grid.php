@@ -24,18 +24,19 @@
                                 <div class="control-group">
                                     <label class="control-label">门票搜索</label>
                                     <div class="controls">
+                                        <input type="hidden" name="sid" value="<?php echo $this->input->get('sid') ?>">
                                         <input type="text" name="goods_search" value="<?php echo $this->input->get('goods_search') ?>" class="m-wrap span12" placeholder="请输入门票编号或门票名称">
                                     </div>
                                 </div>
                             </div>
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">景点星级</label>
+                                    <label class="control-label">接口来源</label>
                                     <div class="controls">
-                                        <select name="star_level" class="m-wrap span12">
+                                        <select name="source_id" class="m-wrap span12">
                                             <option value="0">全部</option>
-                                            <?php foreach ($starLevel as $key => $value):?>
-                                                <option value="<?php echo $key?>" <?php if($key == $this->input->get('star_level')):?>selected="selected"<?php endif;?>><?php echo $value;?></option>
+                                            <?php foreach ($scenicApiSource as $source_id => $value) : ?>
+                                                <option value="<?php echo $source_id;?>" <?php if ($this->input->get('source_id')==$source_id):?>selected="selected"<?php endif;?>><?php echo $value['source_name'] . ' -- ' . ($value['purpose'] == 1 ? '自动对接' : '二次下单')?></option>
                                             <?php endforeach;?>
                                         </select>
                                     </div>
@@ -43,12 +44,12 @@
                             </div>
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">门票状态</label>
+                                    <label class="control-label">审核状态</label>
                                     <div class="controls">
                                         <select name="staus" class="m-wrap span12">
                                             <option value="0">全部</option>
-                                            <?php foreach ($updown as $k=>$v):?>
-                                                <option value="<?php echo $k ?>" <?php if($k == $this->input->get('updown')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
+                                            <?php foreach ($isCheck as $k=>$v):?>
+                                                <option value="<?php echo $k ?>" <?php if($k == $this->input->get('is_check')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
                                             <?php endforeach;?>
                                         </select>
                                     </div>
@@ -58,9 +59,27 @@
                         <div class="row-fluid">
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label">供 应 商</label>
+                                    <label class="control-label">分润方式</label>
                                     <div class="controls">
-                                        <input type="text" name="uid" value="<?php echo $this->input->get('uid') ?>" class="m-wrap span12" placeholder="请输入供应商编号">
+                                        <select name="rate_id" class="m-wrap span12">
+                                            <option value="0">全部</option>
+                                            <?php foreach ($scenicProfitRate as $rate_id=>$value) : ?>
+                                                <option value="<?php echo $rate_id;?>" <?php if ($this->input->get('rate_id')==$rate_id):?>selected="selected"<?php endif;?>><?php echo $value['name']; ?></option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label">上下架</label>
+                                    <div class="controls">
+                                        <select name="staus" class="m-wrap span12">
+                                            <option value="0">全部</option>
+                                            <?php foreach ($isOnSale as $k=>$v):?>
+                                                <option value="<?php echo $k ?>" <?php if($k == $this->input->get('is_on_sale')):?>selected="selected"<?php endif;?>><?php echo $v;?></option>
+                                            <?php endforeach;?>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -79,18 +98,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="span4">
-                                <div class="control-group">
-                                    <label class="control-label">省/市/区</label>
-                                    <div class="controls">
-                                        <?php $this->load->view('commonhtml/districtSelect');?>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div class="form-actions">
                             <button type="submit" class="btn green">搜索</button>
-                            <button type="button" class="btn reset_button_search">重置条件</button>
+                            <a href="<?php echo base_url('scenic_goods/grid').'?sid='.$this->input->get('sid') ?>" class="btn">重置条件</a>
                             <button type="submit" name="excel" class="btn blue">导出Excel</button>
                         </div>
                     </form>
@@ -106,13 +117,15 @@
                 </div>
                 <div class="portlet-body flip-scroll">
                     <div class="dataTables_wrapper form-inline">
-                        <div class="clearfix">
-                            <a href="<?php echo base_url('scenic_base/add') ?>" class="add-button-link">
-                                <div class="btn-group">
-                                    <button class="btn green"><i class="icon-plus"></i> 添加</button>
-                                </div>
-                            </a>
-                        </div>
+                        <?php  if ($this->input->get('sid')) : ?>
+                            <div class="clearfix">
+                                <a href="<?php echo base_url('scenic_goods/add').'?sid='.$this->input->get('sid') ?>" class="add-button-link">
+                                    <div class="btn-group">
+                                        <button class="btn green"><i class="icon-plus"></i> 添加</button>
+                                    </div>
+                                </a>
+                            </div>
+                        <?php endif ?>
                         <?php if ($all_rows > 0) :?>
                             <table class="table table-striped table-bordered table-hover" id="sample_1">
                                 <thead class="flip-content">
@@ -121,8 +134,8 @@
                                         <th width="8%">编号</th>
                                         <th width="8%">票种</th>
                                         <th width="15%">门票名称</th>
-                                        <th width="8%">价格</th>
-                                        <th width="8%">分润方式</th>
+                                        <th width="6%">起价</th>
+                                        <th width="10%">分润方式</th>
                                         <th width="8%">票种来源</th>
                                         <th>状态</th>
                                         <th width="6%">上下架</th>
@@ -141,9 +154,15 @@
                                         <td><?php echo $item->cat_id;?></td>
                                         <td><?php echo $item->goods_name;?></td>
                                         <td><?php echo $item->price;?></td>
-                                        <td><?php echo $item->rate_id;?></td>
-                                        <td><?php echo $item->source_id;?></td>
-                                        <td><?php echo $isCheck[$item->is_check];?></td>
+                                        <td><?php echo $scenicProfitRate[$item->rate_id]['name'];?></td>
+                                        <td><?php echo ($item->source_id != 0) ? $scenicApiSource[$item->source_id]['source_name'] : '无';?></td>
+                                        <td>
+                                            <p><?php echo $isCheck[$item->is_check];?></p>
+                                            <?php if ($item->is_check == 1) :?>
+                                                <a class="btn mini green is-check-status" href="javascript:;" data-id="<?php echo $item->goods_id?>" data-status="2">通过审核</a>
+                                                <a class="btn mini green is-check-status" href="javascript:;" data-id="<?php echo $item->goods_id?>" data-status="3">审核失败</a>
+                                            <?php endif;?>
+                                        </td>
                                         <td>
                                             <a href="javascript:;" class="modify-updown glyphicons no-js <?php if ($item->is_on_sale == 1):?>ok_2<?php else :?>remove_2<?php endif;?>" data-goods-id="<?php echo $item->goods_id;?>" data-flag="<?php echo $item->is_on_sale ?>">
                                                 <i></i>
@@ -184,7 +203,7 @@
                 var goods_id = $(this).attr('data-goods-id');
                 var flag = $(this).attr('data-flag');
                 $.ajax({
-                    url:hostUrl()+'/scenic_base/setUpdown',
+                    url:hostUrl()+'/scenic_goods/setUpdown',
                     type:'POST',
                     dataType:'json',
                     data: {goods_id:goods_id,flag:flag},
@@ -193,6 +212,31 @@
                             obj.attr('data-flag', data.flag).addClass('remove_2').removeClass('ok_2');
                         } else if(data.flag == 1) {
                             obj.attr('data-flag', data.flag).addClass('ok_2').removeClass('remove_2');
+                        } else {
+                            alert('操作失败');
+                        }
+                    }
+                });
+            }
+        });
+
+        $('.is-check-status').click(function(){
+            var obj = $(this);
+            var isCheck = obj.attr('data-status');
+            var goodsId = obj.attr('data-id');
+            var status = '通过审核';
+            if (isCheck == 3) {
+                status = '审核失败';
+            }
+            if (confirm('确定要'+status+'?')) {
+                $.ajax({
+                    url:hostUrl()+'/scenic_goods/isCheck',
+                    type:'POST',
+                    dataType:'json',
+                    data: {goods_id:goodsId, is_check:isCheck},
+                    success: function(data) {
+                        if (data.status) {
+                            obj.siblings('p').text(status).siblings('a').remove();
                         } else {
                             alert('操作失败');
                         }
